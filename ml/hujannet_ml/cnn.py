@@ -31,7 +31,8 @@ from .wetdry import (FEATURES, MODEL_DIR, RESULTS_DIR, SPLITS, WET_MM_H, dip_min
 
 WINDOW = 120
 SAMPLE_FRACTION = 0.1
-EPOCHS = 6
+EPOCHS = {"cnn": 6, "lstm": 20}  # LSTM belajar lebih lambat; MCC validasinya masih naik di epoch 6
+PATIENCE = 3  # berhenti bila MCC validasi tidak membaik selama 3 epoch
 BATCH = 1024
 
 
@@ -125,7 +126,8 @@ def train(data, kind: str) -> tuple[nn.Module, float]:
     opt = torch.optim.Adam(net.parameters(), lr=1e-3)
     loss_fn = nn.BCEWithLogitsLoss()
     best = (-1.0, None, 0.5)
-    for epoch in range(EPOCHS):
+    best_epoch = 0
+    for epoch in range(EPOCHS[kind]):
         t0 = time.time()
         net.train()
         order = np.random.default_rng(epoch).permutation(len(x))
@@ -141,6 +143,9 @@ def train(data, kind: str) -> tuple[nn.Module, float]:
         print(f"epoch {epoch + 1}: MCC validasi {mcc:.3f}, {time.time() - t0:.0f} detik")
         if mcc > best[0]:
             best = (mcc, {k: v.clone() for k, v in net.state_dict().items()}, thr)
+            best_epoch = epoch
+        elif epoch - best_epoch >= PATIENCE:
+            break
     net.load_state_dict(best[1])
     return net, best[2]
 

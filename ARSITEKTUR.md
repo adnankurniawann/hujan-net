@@ -261,8 +261,8 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
 | Aturan ambang dasbor (`classify.ts`) | 0,226 | 0,546 |
 | Random Forest, dilatih pada kedua dataset | 0,486 | 0,580 |
 | Random Forest, dilatih hanya pada dataset lain | 0,335 | 0,556 |
-| 1D-CNN pada deret mentah 120 menit, kedua dataset | **0,536** | **0,629** |
-| LSTM pada deret mentah 120 menit, kedua dataset | 0,507 | 0,616 |
+| 1D-CNN pada deret mentah 120 menit, kedua dataset | 0,536 | 0,629 |
+| LSTM pada deret mentah 120 menit, kedua dataset | **0,540** | **0,638** |
 
 - Aturan dasbor runtuh di OpenRainER: FAR 88 %, CSI 0,11. Ambangnya disetel untuk
   simulasi berderau 0,2 dB, sedangkan data ini dikuantisasi 1 dB.
@@ -277,9 +277,10 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
   10 % contoh latih: CSI 0,39 vs 0,34 (OpenRainER) dan 0,49 vs 0,44 (OpenMRG).
   Jaringan belajar sendiri dari deret redaman, tanpa fitur rancangan tangan.
 - LSTM (`cnn.py lstm`, hasil di [ml/results/wetdry_lstm.md](ml/results/wetdry_lstm.md))
-  ada di antara RF dan CNN. MCC validasinya masih naik di epoch terakhir (0,531 → 0,554),
-  jadi model ini belum jenuh. Dengan 6 epoch, CNN tetap pilihan terbaik, dan juga
-  lebih cepat dilatih (~8 vs ~12 menit per epoch di CPU).
+  butuh lebih banyak epoch: setelah 6 epoch ia masih di bawah CNN (MCC 0,507 / 0,616).
+  Dengan berhenti dini (terbaik di epoch 9, berhenti di 12) ia sedikit melampaui CNN:
+  MCC 0,540 vs 0,536 dan 0,638 vs 0,629. Selisih sekecil ini belum diuji dengan seed lain,
+  jadi CNN dan LSTM dianggap setara. CNN lebih murah dilatih (6 epoch vs 12).
 
 ### 9.6 Badai demo sengaja tidak dibuat lebih kuat
 
