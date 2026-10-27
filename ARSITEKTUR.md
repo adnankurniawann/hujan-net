@@ -150,7 +150,8 @@ lalu dikotori: antena basah 1,5 dB, hanyutan garis dasar 0,5 dB/jam, derau pener
 
 1. **Basah/kering**: ragam jangka pendek di atas 0,6 dB (jendela 21 cuplikan, hanya menoleh
    ke belakang) atau selisih tingkat di atas 0,9 dB, ditambah konsistensi tetangga dalam
-   radius 6 km. **Ambang tangan, bukan model belajar.**
+   radius 6 km. **Ambang tangan, bukan model belajar.** Di data sungguhan kalah
+   jauh dari Random Forest, lihat 9.5.
 2. **Garis dasar**: median bergerak atas cuplikan kering, ±15 menit.
 3. **Antena basah**: kurangi 1,5 dB saat basah.
 4. **Inversi**: `R = (A / L / k)^(1/alpha)`.
@@ -249,7 +250,28 @@ Batasnya:
   harus diukur ulang lewat `ml/`.
 - Masih model linear.
 
-### 9.5 Badai demo sengaja tidak dibuat lebih kuat
+### 9.5 Basah/kering pada data operator sungguhan
+
+`ml/hujannet_ml/wetdry.py`, hasil lengkap di [ml/results/wetdry.md](ml/results/wetdry.md).
+Label dari radar sepanjang lintasan (> 0,1 mm/jam), uji pada bulan yang tidak pernah
+dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3 juta).
+
+| MCC pada data uji | OpenRainER | OpenMRG |
+|---|---|---|
+| Aturan ambang dasbor (`classify.ts`) | 0,226 | 0,546 |
+| Random Forest, dilatih pada kedua dataset | **0,486** | **0,580** |
+| Random Forest, dilatih hanya pada dataset lain | 0,335 | 0,556 |
+
+- Aturan dasbor runtuh di OpenRainER: FAR 88 %, CSI 0,11. Ambangnya disetel untuk
+  simulasi berderau 0,2 dB, sedangkan data ini dikuantisasi 1 dB.
+- Random Forest menaikkan CSI OpenRainER dari 0,11 ke 0,34. Model gabungan hampir sama
+  baiknya dengan model khusus tiap dataset.
+- Model yang dilatih di satu negara tetap mengalahkan aturan di negara lain, tetapi
+  kehilangan sebagian mutunya. Kalibrasi pada data Indonesia tetap diperlukan.
+- Fitur terpenting: selisih redaman terhadap median 24 jam (`dip_mean`, `dip_max`),
+  lalu ragam 60 menit.
+
+### 9.6 Badai demo sengaja tidak dibuat lebih kuat
 
 Jaringan 50 tautan ini hanya bisa memisahkan ciri hujan berorde 6 km. Menaikkan `peakMmH`
 di `scenario.ts` menaikkan RMSE terburuk melewati 8 mm/jam (puncak 46 → 8,4, puncak 53 → 9,6)

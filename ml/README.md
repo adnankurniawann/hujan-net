@@ -14,7 +14,13 @@ uv run pytest
 uv run python -m hujannet_ml.openmrg   # unduh 318 MB, olah 4,6 GB, ~beberapa menit
 uv run python -m hujannet_ml.openrainer # unduh 1,7 GB, buka jadi ~35 GB
 uv run python -m hujannet_ml.nl        # butuh akses ke data.4tu.nl
+
+uv run python -m hujannet_ml.wetdry features   # ~5 menit, 37 juta contoh
+uv run python -m hujannet_ml.wetdry train      # ~15 menit, tulis results/wetdry.md
 ```
+
+Hasil model yang sudah diukur ada di [`results/`](results/) dan masuk git.
+Model terlatihnya disimpan di `data/models/` dan tidak masuk git.
 
 ## Format keluaran
 
