@@ -727,7 +727,7 @@ selama datanya masih simulasi.
 > kebenaran dasar dari radar cuaca sungguhan, diuji pada kejadian hujan yang tidak
 > pernah dipakai melatih.
 >
-> Diselesaikan 11 Agustus 2026. Berkas: [`scripts/openmrg/`](scripts/openmrg/).
+> Diselesaikan 11 Agustus 2026. Berkas asli sudah diganti pipeline yang bisa direproduksi di [`ml/`](ml/).
 
 ### 14.1 Datanya
 
