@@ -71,10 +71,14 @@ def minute_loss(cmls: xr.Dataset) -> tuple[pd.DataFrame, pd.DataFrame]:
     return df, meta
 
 
+def dip_minutes(loss: pd.DataFrame) -> pd.DataFrame:
+    """Redaman di atas median 24 jam bergerak, acuan kering per sub-link."""
+    return loss - loss.rolling(BASE_MIN, min_periods=BASE_MIN // 4).median()
+
+
 def link_features(loss: pd.DataFrame, times: pd.DatetimeIndex, window_min: int) -> dict[str, pd.DataFrame]:
     """Fitur per sub-link pada tiap cap waktu radar, dari menit (t - window, t] dan sebelumnya."""
-    base = loss.rolling(BASE_MIN, min_periods=BASE_MIN // 4).median()
-    dip = loss - base
+    dip = dip_minutes(loss)
     std5 = loss.rolling(5, min_periods=3).std()
     rule = ((std5 > RULE_STD_DB) & (dip > RULE_MIN_DIP_DB)) | (dip > RULE_LEVEL_DB)
     r60 = loss.rolling(60, min_periods=30)
@@ -102,6 +106,7 @@ def to_long(feats: dict[str, pd.DataFrame], ref: pd.DataFrame, meta: pd.DataFram
     out["length_km"] = np.tile(meta["length_km"].to_numpy(np.float32), n_t)
     out["ref_mm_h"] = ref.reindex(index=times, columns=meta["cml_id"]).to_numpy(np.float32).ravel()
     out["time"] = np.repeat(times.values, n_l)
+    out["link_idx"] = np.tile(np.arange(n_l, dtype=np.int32), n_t)
     return pd.DataFrame(out).dropna(subset=[*FEATURES, "rule_wet", "ref_mm_h"]).reset_index(drop=True)
 
 
@@ -110,24 +115,27 @@ def ref_frame(da: xr.DataArray) -> pd.DataFrame:
     return pd.DataFrame(da.values, index=pd.DatetimeIndex(da.time.values), columns=[str(c) for c in da.cml_id.values])
 
 
-def build_features() -> None:
-    FEATURE_DIR.mkdir(parents=True, exist_ok=True)
-
+def iter_chunks():
+    """(dataset, bagian, redaman menit, metadata, label radar, jendela label menit), sepotong demi sepotong supaya muat di memori."""
     ref = ref_frame(xr.open_dataarray(PROCESSED / "openmrg" / "cml_radar_ref.nc"))
     cml_all = xr.open_dataset(PROCESSED / "openmrg" / "cml_1min.nc")
-    for i in range(0, cml_all.sizes["cml_id"], 60):  # per 60 CML supaya muat di memori
+    for i in range(0, cml_all.sizes["cml_id"], 60):
         loss, meta = minute_loss(cml_all.isel(cml_id=slice(i, i + 60)).load())
-        df = to_long(link_features(loss, ref.index, window_min=5), ref, meta)
-        df.to_pickle(FEATURE_DIR / f"openmrg_{i:04d}.pkl")
-        print(f"openmrg CML {i}-{i + 59}: {len(df)} contoh")
+        yield "openmrg", f"{i:04d}", loss, meta, ref, 5
 
     for path in sorted((PROCESSED / "openrainer" / "cml").glob("CML_*.nc")):
         month = path.stem[4:]
         ref = ref_frame(xr.open_dataarray(PROCESSED / "openrainer" / "ref" / f"ref_{month}.nc"))
         loss, meta = minute_loss(xr.open_dataset(path).load())
-        df = to_long(link_features(loss, ref.index, window_min=15), ref, meta)
-        df.to_pickle(FEATURE_DIR / f"openrainer_{month}.pkl")
-        print(f"openrainer {month}: {len(df)} contoh")
+        yield "openrainer", month, loss, meta, ref, 15
+
+
+def build_features() -> None:
+    FEATURE_DIR.mkdir(parents=True, exist_ok=True)
+    for name, part, loss, meta, ref, window in iter_chunks():
+        df = to_long(link_features(loss, ref.index, window), ref, meta)
+        df.to_pickle(FEATURE_DIR / f"{name}_{part}.pkl")
+        print(f"{name} {part}: {len(df)} contoh")
 
 
 # --- penilaian ---------------------------------------------------------------

@@ -259,8 +259,9 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
 | MCC pada data uji | OpenRainER | OpenMRG |
 |---|---|---|
 | Aturan ambang dasbor (`classify.ts`) | 0,226 | 0,546 |
-| Random Forest, dilatih pada kedua dataset | **0,486** | **0,580** |
+| Random Forest, dilatih pada kedua dataset | 0,486 | 0,580 |
 | Random Forest, dilatih hanya pada dataset lain | 0,335 | 0,556 |
+| 1D-CNN pada deret mentah 120 menit, kedua dataset | **0,536** | **0,629** |
 
 - Aturan dasbor runtuh di OpenRainER: FAR 88 %, CSI 0,11. Ambangnya disetel untuk
   simulasi berderau 0,2 dB, sedangkan data ini dikuantisasi 1 dB.
@@ -270,6 +271,10 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
   kehilangan sebagian mutunya. Kalibrasi pada data Indonesia tetap diperlukan.
 - Fitur terpenting: selisih redaman terhadap median 24 jam (`dip_mean`, `dip_max`),
   lalu ragam 60 menit.
+- 1D-CNN (`ml/hujannet_ml/cnn.py`, hasil di [ml/results/wetdry_cnn.md](ml/results/wetdry_cnn.md))
+  mengalahkan RF di kedua dataset pada baris uji yang sama, padahal hanya dilatih pada
+  10 % contoh latih: CSI 0,39 vs 0,34 (OpenRainER) dan 0,49 vs 0,44 (OpenMRG).
+  Jaringan belajar sendiri dari deret redaman, tanpa fitur rancangan tangan.
 
 ### 9.6 Badai demo sengaja tidak dibuat lebih kuat
 
