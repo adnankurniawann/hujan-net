@@ -18,6 +18,7 @@ uv run python -m hujannet_ml.nl        # butuh akses ke data.4tu.nl
 uv run python -m hujannet_ml.wetdry features   # ~5 menit, 37 juta contoh
 uv run python -m hujannet_ml.wetdry train      # ~15 menit, tulis results/wetdry.md
 uv run python -m hujannet_ml.cnn               # ~90 menit di CPU, tulis results/wetdry_cnn.md
+uv run python -m hujannet_ml.cnn lstm          # ~2,5 jam di CPU, tulis results/wetdry_lstm.md
 ```
 
 Hasil model yang sudah diukur ada di [`results/`](results/) dan masuk git.

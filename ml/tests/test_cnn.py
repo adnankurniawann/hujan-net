@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from hujannet_ml.cnn import WINDOW, Net, sequences, split_labels
+from hujannet_ml.cnn import WINDOW, Lstm, Net, sequences, split_labels
 
 
 def test_sequences_end_before_label_time():
@@ -24,8 +24,8 @@ def test_sequences_clip():
 
 
 def test_net_shapes():
-    out = Net()(torch.zeros(3, 2, WINDOW), torch.zeros(3, 2))
-    assert out.shape == (3,)
+    for net in (Net(), Lstm()):
+        assert net(torch.zeros(3, 2, WINDOW), torch.zeros(3, 2)).shape == (3,)
 
 
 def test_split_labels():

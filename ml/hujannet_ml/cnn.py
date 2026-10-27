@@ -1,7 +1,8 @@
-"""1D-CNN basah/kering, tahap kedua setelah Random Forest.
+"""1D-CNN dan LSTM basah/kering, tahap kedua dan ketiga setelah Random Forest.
 
 Jalankan (setelah `wetdry features` dan `wetdry train`, karena RF pembandingnya dimuat dari sana):
-  uv run python -m hujannet_ml.cnn
+  uv run python -m hujannet_ml.cnn        # 1D-CNN
+  uv run python -m hujannet_ml.cnn lstm   # LSTM, juga membandingkan CNN yang sudah tersimpan
 
 Masukannya deret redaman mentah 120 menit sebelum cap waktu radar, bukan fitur
 yang dirancang tangan seperti RF. Gagasannya mengikuti Polz dkk. (2020, AMT 13,
@@ -16,6 +17,7 @@ supaya angkanya bisa dibandingkan langsung.
 
 import json
 import os
+import sys
 import time
 
 import joblib
@@ -48,6 +50,21 @@ class Net(nn.Module):
         return self.head(torch.cat([self.conv(x).flatten(1), meta], 1)).squeeze(1)
 
 
+class Lstm(nn.Module):
+    """Membaca deret menit demi menit; keadaan tersembunyi terakhir masuk lapisan padat."""
+
+    def __init__(self):
+        super().__init__()
+        self.lstm = nn.LSTM(2, 64, batch_first=True)
+        self.head = nn.Sequential(nn.Linear(64 + 2, 64), nn.ReLU(), nn.Dropout(0.2), nn.Linear(64, 1))
+
+    def forward(self, x: torch.Tensor, meta: torch.Tensor) -> torch.Tensor:
+        return self.head(torch.cat([self.lstm(x.transpose(1, 2))[0][:, -1], meta], 1)).squeeze(1)
+
+
+NETS = {"cnn": (Net, "1D-CNN (deret mentah)"), "lstm": (Lstm, "LSTM (deret mentah)")}
+
+
 def sequences(dip: np.ndarray, pos: np.ndarray, link: np.ndarray) -> np.ndarray:
     """Potongan [n, 2, WINDOW] dari menit pos-WINDOW .. pos-1, kanal redaman dan topeng."""
     x = dip[pos[:, None] - WINDOW + np.arange(WINDOW), link[:, None]]
@@ -75,7 +92,7 @@ def chunk_rows(loss, meta, ref, window):
     return rows[keep].reset_index(drop=True), dip_minutes(loss).to_numpy(np.float32), pos[keep]
 
 
-def predict(net: Net, x: np.ndarray, meta: np.ndarray) -> np.ndarray:
+def predict(net: nn.Module, x: np.ndarray, meta: np.ndarray) -> np.ndarray:
     net.eval()
     out = []
     with torch.no_grad():
@@ -100,11 +117,11 @@ def collect() -> dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]]:
     return {s: tuple(np.concatenate(a) for a in zip(*p)) for s, p in parts.items()}
 
 
-def train(data) -> tuple[Net, float]:
+def train(data, kind: str) -> tuple[nn.Module, float]:
     torch.manual_seed(0)
     x, meta, y = data["train"]
     xv, mv, yv = data["val"]
-    net = Net()
+    net = NETS[kind][0]()
     opt = torch.optim.Adam(net.parameters(), lr=1e-3)
     loss_fn = nn.BCEWithLogitsLoss()
     best = (-1.0, None, 0.5)
@@ -128,10 +145,10 @@ def train(data) -> tuple[Net, float]:
     return net, best[2]
 
 
-def evaluate(net: Net, cnn_thr: float) -> dict:
-    """Aturan dasbor, RF gabungan, dan CNN pada baris uji yang persis sama."""
+def evaluate(nets: dict[str, tuple[nn.Module, float]]) -> dict:
+    """Aturan dasbor, RF gabungan, dan tiap jaringan pada baris uji yang persis sama."""
     rf = joblib.load(MODEL_DIR / "wetdry_rf_gabungan.joblib")
-    acc = {name: {"y": [], "rule": [], "rf": [], "cnn": []} for name in SPLITS}
+    acc = {name: {k: [] for k in ["y", "rule", "rf", *nets]} for name in SPLITS}
     for name, part, loss, meta, ref, window in iter_chunks():
         rows, dip, pos = chunk_rows(loss, meta, ref, window)
         m = split_labels(name, rows.time) == "test"
@@ -142,38 +159,50 @@ def evaluate(net: Net, cnn_thr: float) -> dict:
         a["y"].append(rows.ref_mm_h.to_numpy() > WET_MM_H)
         a["rule"].append(rows.rule_wet.to_numpy() > 0)
         a["rf"].append(rf["model"].predict_proba(rows[FEATURES])[:, 1] > rf["threshold"])
-        a["cnn"].append(predict(net, sequences(dip, pos, rows.link_idx.to_numpy()), meta_inputs(rows)) > cnn_thr)
+        x, m_in = sequences(dip, pos, rows.link_idx.to_numpy()), meta_inputs(rows)
+        for k, (net, thr) in nets.items():
+            a[k].append(predict(net, x, m_in) > thr)
         print(f"uji {name} {part}")
-    return {name: {k: scores(np.concatenate(a["y"]), np.concatenate(a[k])) for k in ("rule", "rf", "cnn")}
+    return {name: {k: scores(np.concatenate(a["y"]), np.concatenate(v)) for k, v in a.items() if k != "y"}
             for name, a in acc.items()}
 
 
-def write_report(results: dict, cnn_thr: float, n_train: int) -> None:
-    (RESULTS_DIR / "wetdry_cnn.json").write_text(json.dumps({"cnn_threshold": cnn_thr, "train_rows": n_train, "test": results}, indent=2))
-    lines = ["# 1D-CNN basah/kering vs Random Forest", "",
+def write_report(results: dict, kind: str, thr: float, n_train: int) -> None:
+    (RESULTS_DIR / f"wetdry_{kind}.json").write_text(json.dumps({f"{kind}_threshold": thr, "train_rows": n_train, "test": results}, indent=2))
+    lines = [f"# {NETS[kind][1].split(' ')[0]} basah/kering vs Random Forest", "",
              f"Dilatih pada kedua dataset ({n_train:,} contoh, {SAMPLE_FRACTION:.0%} dari bulan latih). "
              f"Basah = radar > {WET_MM_H} mm/jam. Ketiga metode dinilai pada baris uji yang sama.", ""]
     for name, r in results.items():
         lines += [f"## Uji: {name}, fraksi basah {r['rule']['wet_fraction']:.1%}, {r['rule']['n']:,} contoh", "",
                   "| Metode | POD | FAR | CSI | MCC |", "|---|---|---|---|---|"]
-        for k, label in (("rule", "aturan dasbor"), ("rf", "Random Forest (fitur tangan)"), ("cnn", "1D-CNN (deret mentah)")):
-            s = r[k]
+        labels = {"rule": "aturan dasbor", "rf": "Random Forest (fitur tangan)", **{k: v[1] for k, v in NETS.items()}}
+        for k in r:
+            s, label = r[k], labels[k]
             lines.append(f"| {label} | {s['pod']:.3f} | {s['far']:.3f} | {s['csi']:.3f} | {s['mcc']:.3f} |")
         lines.append("")
-    (RESULTS_DIR / "wetdry_cnn.md").write_text("\n".join(lines))
+    (RESULTS_DIR / f"wetdry_{kind}.md").write_text("\n".join(lines))
     print("\n".join(lines))
 
 
-def main() -> None:
+def load(kind: str) -> tuple[nn.Module, float]:
+    saved = torch.load(MODEL_DIR / f"wetdry_{kind}.pt")
+    net = NETS[kind][0]()
+    net.load_state_dict(saved["state_dict"])
+    return net, saved["threshold"]
+
+
+def main(kind: str) -> None:
     torch.set_num_threads(os.cpu_count() or 1)
     data = collect()
     print(f"latih {len(data['train'][2]):,}, validasi {len(data['val'][2]):,}, basah latih {data['train'][2].mean():.1%}")
-    net, thr = train(data)
-    torch.save({"state_dict": net.state_dict(), "threshold": thr, "window": WINDOW}, MODEL_DIR / "wetdry_cnn.pt")
+    net, thr = train(data, kind)
+    torch.save({"state_dict": net.state_dict(), "threshold": thr, "window": WINDOW}, MODEL_DIR / f"wetdry_{kind}.pt")
     n_train = len(data["train"][2])
     del data
-    write_report(evaluate(net, thr), thr, n_train)
+    # jaringan lain yang sudah dilatih ikut dinilai, supaya semua dibandingkan pada baris yang sama
+    nets = {k: load(k) for k in NETS if k != kind and (MODEL_DIR / f"wetdry_{k}.pt").exists()} | {kind: (net, thr)}
+    write_report(evaluate(nets), kind, thr, n_train)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "cnn")
