@@ -1,0 +1,20 @@
+[project]
+name = "hujannet-ml"
+version = "0.1.0"
+description = "Pipeline data dan model AI HujanNet"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "numpy",
+    "pandas",
+    "xarray",
+    "netcdf4",
+    "h5py",
+    "poligrain",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

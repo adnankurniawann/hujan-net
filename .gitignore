@@ -35,3 +35,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pipeline data AI (unduhan dan hasil olahan, dibuat ulang lewat ml/)
+ml/data/
+ml/.venv/
+__pycache__/
+.pytest_cache/
