@@ -41,3 +41,4 @@ ml/data/
 ml/.venv/
 __pycache__/
 .pytest_cache/
+ml/.env

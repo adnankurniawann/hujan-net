@@ -14,7 +14,7 @@ Ini bahan utama untuk dua komponen AI di proposal: klasifikasi basah/kering dan 
 |---|---|---|---|---|---|
 | **Four-year CML Netherlands** (Overeem dkk., 2024) | ~3.070 sub-link, ~1.818 lintasan, T-Mobile NL, 2011–2015 | **15 menit, RSL min/maks** | Radar terkoreksi penakar, dataset terpisah tapi terbuka | CC BY 4.0 | [4TU](https://data.4tu.nl/datasets/be252844-b672-471e-8d69-27269a862ec1) |
 | **OpenMRG** (Andersson dkk., 2022) | 364 link bi-arah, Gothenburg, Jun–Agu 2015 | 10 detik, RSL + TSL | Radar C-band + 11 penakar | CC BY-SA 4.0 | [Zenodo](https://zenodo.org/records/7107689), satu zip 318 MB |
-| **OpenRainER** (Emilia-Romagna, Italia) | Jaringan Lepida, 2021–2022 | 1 menit, RSL + TSL | Radar + penakar | CC BY 4.0 | [Zenodo demo](https://zenodo.org/records/10593849) (ada versi lebih baru), paper [ESSD preprint](https://essd.copernicus.org/preprints/essd-2026-160/) |
+| **OpenRainER** (Emilia-Romagna, Italia) | ~151 link Lepida, 2021–2022, **sudah dipakai di `ml/`** | 1 menit, RSL + TSL, kuantisasi 1 dB | Radar terkoreksi penakar 15 menit, ~1 km | CC BY 4.0 | [Zenodo v2.0.3](https://zenodo.org/records/22829808), paper [ESSD preprint](https://essd.copernicus.org/preprints/essd-2026-160/) |
 | CML NL lama | ~2.500 link, 2011–2012 | 15 menit | Radar | terbuka | [4TU](https://data.4tu.nl/datasets/7a692e36-c32f-4916-813b-c62d2566e8d8) |
 | **Sri Lanka** (Overeem dkk., 2021) | **Hanya peta hujan hasil CML**, bukan sinyal mentah, Sep–Des 2019 | 15 menit, grid ~4 km | — | CC BY 4.0 | [4TU](https://data.4tu.nl/datasets/01608fb8-a996-467c-b0e9-c0bd4524e0f8) |
 
@@ -81,7 +81,7 @@ k dan α bisa **dihitung** dari distribusi ukuran butir (DSD) lewat hamburan T-m
 
 | Komponen | Latih pakai | Uji pakai |
 |---|---|---|
-| Klasifikasi basah/kering (RF → 1D-CNN → LSTM) | NL 4 tahun + OpenMRG, label dari radar | OpenRainER (jaringan dan negara berbeda = uji lintas wilayah) |
+| Klasifikasi basah/kering (RF → 1D-CNN → LSTM) | OpenMRG + OpenRainER, label dari radar. NL jika 4TU bisa dijangkau | Kejadian yang ditahan, dan lintas dataset: latih di satu negara, uji di negara lain |
 | Rekonstruksi peta (pengganti IDW/ridge) | Pasangan CML → grid radar dari NL/OpenMRG, ditambah medan GSMaP/IMERG di atas topologi menara Indonesia | Kejadian yang ditahan, pemisahan per kejadian |
 | Adaptasi tropis, koefisien k dan α | Hitung dari DSD tropis (ARM Darwin/Manus, GPM DPR, Parsivel Indonesia jika diizinkan) | Instrumen Ku-band (Lapis 2) + penakar BMKG / SACA&D |
 
