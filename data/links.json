@@ -1,0 +1,752 @@
+[
+  {
+    "id": "L-001",
+    "siteA": {
+      "lat": -6.675191,
+      "lon": 106.978161
+    },
+    "siteB": {
+      "lat": -6.716121,
+      "lon": 106.992804
+    },
+    "lengthKm": 4.83,
+    "freqGHz": 23,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-002",
+    "siteA": {
+      "lat": -6.654003,
+      "lon": 106.945165
+    },
+    "siteB": {
+      "lat": -6.634306,
+      "lon": 106.919182
+    },
+    "lengthKm": 3.61,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-003",
+    "siteA": {
+      "lat": -6.652369,
+      "lon": 106.967106
+    },
+    "siteB": {
+      "lat": -6.704135,
+      "lon": 107.01636
+    },
+    "lengthKm": 7.92,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-004",
+    "siteA": {
+      "lat": -6.667031,
+      "lon": 106.982069
+    },
+    "siteB": {
+      "lat": -6.69117,
+      "lon": 106.944519
+    },
+    "lengthKm": 4.94,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-005",
+    "siteA": {
+      "lat": -6.704967,
+      "lon": 106.928611
+    },
+    "siteB": {
+      "lat": -6.712212,
+      "lon": 106.890179
+    },
+    "lengthKm": 4.32,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-006",
+    "siteA": {
+      "lat": -6.715659,
+      "lon": 106.960855
+    },
+    "siteB": {
+      "lat": -6.718695,
+      "lon": 106.998401
+    },
+    "lengthKm": 4.16,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-007",
+    "siteA": {
+      "lat": -6.65925,
+      "lon": 106.920984
+    },
+    "siteB": {
+      "lat": -6.65354,
+      "lon": 106.941658
+    },
+    "lengthKm": 2.37,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-008",
+    "siteA": {
+      "lat": -6.700895,
+      "lon": 106.9549
+    },
+    "siteB": {
+      "lat": -6.72778,
+      "lon": 106.954394
+    },
+    "lengthKm": 2.99,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-009",
+    "siteA": {
+      "lat": -6.697188,
+      "lon": 106.964856
+    },
+    "siteB": {
+      "lat": -6.713903,
+      "lon": 106.977579
+    },
+    "lengthKm": 2.33,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-010",
+    "siteA": {
+      "lat": -6.659045,
+      "lon": 106.962263
+    },
+    "siteB": {
+      "lat": -6.692535,
+      "lon": 107.024524
+    },
+    "lengthKm": 7.82,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-011",
+    "siteA": {
+      "lat": -6.684672,
+      "lon": 106.95647
+    },
+    "siteB": {
+      "lat": -6.735545,
+      "lon": 106.918524
+    },
+    "lengthKm": 7.04,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-012",
+    "siteA": {
+      "lat": -6.70373,
+      "lon": 106.922703
+    },
+    "siteB": {
+      "lat": -6.7221,
+      "lon": 106.876267
+    },
+    "lengthKm": 5.52,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-013",
+    "siteA": {
+      "lat": -6.705847,
+      "lon": 106.918603
+    },
+    "siteB": {
+      "lat": -6.705081,
+      "lon": 106.938781
+    },
+    "lengthKm": 2.23,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-014",
+    "siteA": {
+      "lat": -6.678914,
+      "lon": 106.919547
+    },
+    "siteB": {
+      "lat": -6.680467,
+      "lon": 106.940223
+    },
+    "lengthKm": 2.29,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-015",
+    "siteA": {
+      "lat": -6.717645,
+      "lon": 106.992586
+    },
+    "siteB": {
+      "lat": -6.752503,
+      "lon": 106.975518
+    },
+    "lengthKm": 4.31,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-016",
+    "siteA": {
+      "lat": -6.660979,
+      "lon": 106.959402
+    },
+    "siteB": {
+      "lat": -6.649381,
+      "lon": 106.990609
+    },
+    "lengthKm": 3.68,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-017",
+    "siteA": {
+      "lat": -6.652656,
+      "lon": 106.918511
+    },
+    "siteB": {
+      "lat": -6.63685,
+      "lon": 106.986481
+    },
+    "lengthKm": 7.71,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-018",
+    "siteA": {
+      "lat": -6.652204,
+      "lon": 106.933419
+    },
+    "siteB": {
+      "lat": -6.706844,
+      "lon": 106.935496
+    },
+    "lengthKm": 6.08,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-019",
+    "siteA": {
+      "lat": -6.689584,
+      "lon": 106.987163
+    },
+    "siteB": {
+      "lat": -6.641964,
+      "lon": 107.021298
+    },
+    "lengthKm": 6.5,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-020",
+    "siteA": {
+      "lat": -6.672389,
+      "lon": 106.933543
+    },
+    "siteB": {
+      "lat": -6.626182,
+      "lon": 106.916816
+    },
+    "lengthKm": 5.46,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-021",
+    "siteA": {
+      "lat": -6.662879,
+      "lon": 106.926794
+    },
+    "siteB": {
+      "lat": -6.70328,
+      "lon": 106.904744
+    },
+    "lengthKm": 5.11,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-022",
+    "siteA": {
+      "lat": -6.694477,
+      "lon": 106.963665
+    },
+    "siteB": {
+      "lat": -6.714046,
+      "lon": 106.959684
+    },
+    "lengthKm": 2.22,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-023",
+    "siteA": {
+      "lat": -6.68742,
+      "lon": 106.987201
+    },
+    "siteB": {
+      "lat": -6.690501,
+      "lon": 107.045069
+    },
+    "lengthKm": 6.4,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-024",
+    "siteA": {
+      "lat": -6.660328,
+      "lon": 106.985502
+    },
+    "siteB": {
+      "lat": -6.703005,
+      "lon": 106.995804
+    },
+    "lengthKm": 4.88,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-025",
+    "siteA": {
+      "lat": -6.681089,
+      "lon": 106.958666
+    },
+    "siteB": {
+      "lat": -6.730885,
+      "lon": 106.93281
+    },
+    "lengthKm": 6.23,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-026",
+    "siteA": {
+      "lat": -6.680423,
+      "lon": 106.961086
+    },
+    "siteB": {
+      "lat": -6.671959,
+      "lon": 106.893256
+    },
+    "lengthKm": 7.55,
+    "freqGHz": 23,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-027",
+    "siteA": {
+      "lat": -6.674084,
+      "lon": 106.915093
+    },
+    "siteB": {
+      "lat": -6.696827,
+      "lon": 106.940653
+    },
+    "lengthKm": 3.79,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-028",
+    "siteA": {
+      "lat": -6.705571,
+      "lon": 106.982995
+    },
+    "siteB": {
+      "lat": -6.665998,
+      "lon": 106.959293
+    },
+    "lengthKm": 5.12,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-029",
+    "siteA": {
+      "lat": -6.714039,
+      "lon": 106.93183
+    },
+    "siteB": {
+      "lat": -6.70555,
+      "lon": 106.969818
+    },
+    "lengthKm": 4.3,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-030",
+    "siteA": {
+      "lat": -6.661874,
+      "lon": 106.947141
+    },
+    "siteB": {
+      "lat": -6.649895,
+      "lon": 106.969543
+    },
+    "lengthKm": 2.81,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-031",
+    "siteA": {
+      "lat": -6.676871,
+      "lon": 106.915583
+    },
+    "siteB": {
+      "lat": -6.67604,
+      "lon": 106.881276
+    },
+    "lengthKm": 3.79,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-032",
+    "siteA": {
+      "lat": -6.691032,
+      "lon": 106.953694
+    },
+    "siteB": {
+      "lat": -6.649524,
+      "lon": 106.942095
+    },
+    "lengthKm": 4.79,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-033",
+    "siteA": {
+      "lat": -6.688783,
+      "lon": 106.931831
+    },
+    "siteB": {
+      "lat": -6.720455,
+      "lon": 106.963457
+    },
+    "lengthKm": 4.96,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-034",
+    "siteA": {
+      "lat": -6.652749,
+      "lon": 106.988803
+    },
+    "siteB": {
+      "lat": -6.651841,
+      "lon": 107.014229
+    },
+    "lengthKm": 2.81,
+    "freqGHz": 23,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-035",
+    "siteA": {
+      "lat": -6.704686,
+      "lon": 106.93942
+    },
+    "siteB": {
+      "lat": -6.739599,
+      "lon": 106.910316
+    },
+    "lengthKm": 5.04,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-036",
+    "siteA": {
+      "lat": -6.679051,
+      "lon": 106.910599
+    },
+    "siteB": {
+      "lat": -6.645736,
+      "lon": 106.961475
+    },
+    "lengthKm": 6.73,
+    "freqGHz": 15,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-037",
+    "siteA": {
+      "lat": -6.719143,
+      "lon": 106.9168
+    },
+    "siteB": {
+      "lat": -6.737568,
+      "lon": 106.924303
+    },
+    "lengthKm": 2.21,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-038",
+    "siteA": {
+      "lat": -6.682662,
+      "lon": 106.957721
+    },
+    "siteB": {
+      "lat": -6.727425,
+      "lon": 106.980956
+    },
+    "lengthKm": 5.6,
+    "freqGHz": 23,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-039",
+    "siteA": {
+      "lat": -6.669582,
+      "lon": 106.9415
+    },
+    "siteB": {
+      "lat": -6.646744,
+      "lon": 106.894588
+    },
+    "lengthKm": 5.77,
+    "freqGHz": 18,
+    "polarization": "V",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-040",
+    "siteA": {
+      "lat": -6.708784,
+      "lon": 106.960789
+    },
+    "siteB": {
+      "lat": -6.696826,
+      "lon": 106.992152
+    },
+    "lengthKm": 3.71,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-041",
+    "siteA": {
+      "lat": -6.654705,
+      "lon": 106.955698
+    },
+    "siteB": {
+      "lat": -6.621678,
+      "lon": 106.91552
+    },
+    "lengthKm": 5.76,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-042",
+    "siteA": {
+      "lat": -6.715045,
+      "lon": 106.978133
+    },
+    "siteB": {
+      "lat": -6.729689,
+      "lon": 106.960362
+    },
+    "lengthKm": 2.55,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-043",
+    "siteA": {
+      "lat": -6.676972,
+      "lon": 106.99719
+    },
+    "siteB": {
+      "lat": -6.701613,
+      "lon": 106.986812
+    },
+    "lengthKm": 2.97,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-044",
+    "siteA": {
+      "lat": -6.664309,
+      "lon": 106.963362
+    },
+    "siteB": {
+      "lat": -6.625875,
+      "lon": 107.001365
+    },
+    "lengthKm": 5.99,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-045",
+    "siteA": {
+      "lat": -6.668609,
+      "lon": 106.968809
+    },
+    "siteB": {
+      "lat": -6.616381,
+      "lon": 106.947169
+    },
+    "lengthKm": 6.28,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-046",
+    "siteA": {
+      "lat": -6.652378,
+      "lon": 106.91849
+    },
+    "siteB": {
+      "lat": -6.618787,
+      "lon": 106.920207
+    },
+    "lengthKm": 3.74,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-047",
+    "siteA": {
+      "lat": -6.693889,
+      "lon": 106.977037
+    },
+    "siteB": {
+      "lat": -6.695414,
+      "lon": 107.048283
+    },
+    "lengthKm": 7.87,
+    "freqGHz": 18,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-048",
+    "siteA": {
+      "lat": -6.705706,
+      "lon": 106.976942
+    },
+    "siteB": {
+      "lat": -6.725061,
+      "lon": 106.956363
+    },
+    "lengthKm": 3.13,
+    "freqGHz": 23,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-049",
+    "siteA": {
+      "lat": -6.715657,
+      "lon": 106.946656
+    },
+    "siteB": {
+      "lat": -6.736877,
+      "lon": 106.958541
+    },
+    "lengthKm": 2.7,
+    "freqGHz": 15,
+    "polarization": "H",
+    "txPowerDbm": 18
+  },
+  {
+    "id": "L-050",
+    "siteA": {
+      "lat": -6.698388,
+      "lon": 106.954568
+    },
+    "siteB": {
+      "lat": -6.628816,
+      "lon": 106.950368
+    },
+    "lengthKm": 7.75,
+    "freqGHz": 23,
+    "polarization": "V",
+    "txPowerDbm": 18
+  }
+]

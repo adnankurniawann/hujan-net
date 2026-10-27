@@ -1,0 +1,493 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   BAHASA VISUAL — "dibaca lewat kaca basah".
+
+   Lapisan data (fisika, inversi, kontrak tipe) tidak berubah sama sekali.
+   Yang berubah kulitnya: dari konsol gelap plum-indigo menjadi konsol terang
+   bercahaya siang mendung, dengan panel kaca sungguhan di atas peta.
+
+   Kenapa terang, bukan gelap. Konsol ini dipakai di ruang operasi BPBD pada
+   siang hari, dan dinilai lewat proyektor di aula ber-lampu menyala. Tema
+   gelap luntur pada dua-duanya. Terangnya dipilih dari tempat pemakaian, bukan
+   dari kebiasaan kategori.
+
+   Kenapa kaca. Karena produk ini memang membaca cuaca lewat kaca: kaca hanya
+   dipakai di tempat yang secara fisik memang berkaca — panel yang melayang di
+   atas peta dan di atas medan hujan. Di atas kartu buram, kaca tidak dipakai
+   sama sekali. Itu bedanya kaca sebagai bahan dan kaca sebagai hiasan.
+
+   Nama token DIPERTAHANKAN (--bg, --surface, --signal, --rain, --alert, --ok)
+   supaya arti semantiknya tidak bergeser:
+     --signal = besaran yang diukur radio (redaman, daya terima)
+     --rain   = besaran cuaca yang disimpulkan darinya (mm/jam)
+     --ok / --alert = status, bukan hiasan
+
+   Satu warna aksen data untuk hujan, satu untuk sinyal. Tidak ada warna
+   keempat. `--violet` dihapus seluruhnya: ia sempat berarti "kontrol aktif"
+   sekaligus "ini data", dan warna yang berarti dua hal tidak berarti apa-apa.
+--------------------------------------------------------------------------- */
+:root {
+  /* latar — cahaya siang mendung, dingin dan sedikit kebiruan */
+  --bg: #e4ebf2;
+  --bg-deep: #d3dce6;
+  --shell: #f7fafc;
+  --surface: #ffffff;
+  --surface-2: #f2f6fa;
+  --surface-3: #e8eef5;
+  --inset: rgba(15, 32, 51, 0.045);
+
+  /* garis — tinta, bukan putih; pada latar terang garis putih tidak terlihat */
+  --border: rgba(15, 32, 51, 0.12);
+  --border-strong: rgba(15, 32, 51, 0.22);
+  --hairline: rgba(15, 32, 51, 0.07);
+
+  /* teks — semuanya lulus WCAG AA di atas keempat latar kartu */
+  --text: #0f2033;
+  --text-rgb: 15 32 51;
+  --text-mute: #47617a;
+  --text-dim: #546a7e;
+
+  /* Aksen dan status ditulis dua kali: bentuk heks untuk dipakai langsung oleh
+     CSS dan kanvas, dan kanal RGB terpisah untuk Tailwind. Yang kedua wajib
+     ada, karena pengubah alfa (`bg-rain/12`) tidak bisa menyisipkan alfa ke
+     dalam sebuah string heks di balik `var()`. Keduanya harus tetap sama.
+
+     Pada latar terang hubungannya terbalik dari tema gelap: varian `-text`
+     LEBIH GELAP daripada varian isian, bukan lebih terang. */
+
+  /* aksen data */
+  --rain: #1f6fd0;
+  --rain-rgb: 31 111 208;
+  --rain-text: #0f5fb8;
+  --rain-text-rgb: 15 95 184;
+  --signal: #b8720d;
+  --signal-rgb: 184 114 13;
+  --signal-text: #8a5206;
+  --signal-text-rgb: 138 82 6;
+
+  /* status */
+  --alert: #c33f26;
+  --alert-rgb: 195 63 38;
+  --alert-text: #b0311c;
+  --alert-text-rgb: 176 49 28;
+  --ok: #0d7d64;
+  --ok-rgb: 13 125 100;
+  --ok-text: #096450;
+  --ok-text-rgb: 9 100 80;
+
+  /* Skala "rendah → tinggi" untuk meter galat. Tiga perhentian, semuanya token
+     yang sudah ada — tidak ada kuning kelima yang diselundupkan. */
+  --scale-low: #0d7d64;
+  --scale-mid: #b8720d;
+  --scale-high: #c33f26;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* satu layar; hanya isi panggung yang menggulir */
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Langit mendung: satu sapuan vertikal, bukan empat bulatan warna. Cahaya
+     datang dari atas seperti siang tertutup awan, dan itulah satu-satunya
+     alasan gradien ini ada. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, #eef3f8 0%, var(--bg) 38%, var(--bg-deep) 100%);
+  }
+
+  input,
+  select,
+  textarea {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* ---- kartu: satuan tata letak utama ----------------------------------
+     Kertas buram, bukan kaca. Bayangannya punya offset dan sebaran lembut,
+     jadi kartunya benar-benar terangkat dari latar, bukan berpendar. */
+  .card {
+    position: relative;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow:
+      0 1px 2px -1px rgba(15, 32, 51, 0.1),
+      0 8px 20px -14px rgba(15, 32, 51, 0.28);
+  }
+
+  /* kartu di dalam kartu: lebih gelap sedikit, bukan lebih terang */
+  .card-inset {
+    border-radius: 10px;
+    border: 1px solid var(--hairline);
+    background: var(--inset);
+  }
+
+  /* wadah pil untuk kelompok statistik di bilah atas */
+  .pill-group {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    border: 1px solid var(--hairline);
+    background: var(--surface-2);
+  }
+
+  /* ---- kaca: HANYA di atas peta dan medan hujan -------------------------
+     Aturannya satu kalimat: kalau di belakangnya bukan peta atau kanvas medan,
+     jangan pakai kelas ini. Kaca di atas warna rata bukan kaca, cuma kabur.
+
+     Tiga hal yang membuatnya terbaca sebagai kaca sungguhan, bukan panel
+     buram biasa: saturasi latar dinaikkan (kaca basah memekatkan warna di
+     baliknya), sorot tipis satu piksel di tepi atas tempat cahaya tertangkap,
+     dan bayangan kontak berarah di bawah. Buramnya sendiri kecil dan sama di
+     mana-mana — kaca jendela setebal 6 mm, bukan kabut. */
+  .glass {
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(10px) saturate(1.45);
+    -webkit-backdrop-filter: blur(10px) saturate(1.45);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      0 2px 4px -2px rgba(15, 32, 51, 0.18),
+      0 12px 28px -18px rgba(15, 32, 51, 0.42);
+  }
+
+  /* Air yang meluncur turun. Satu sapuan sangat tipis dari tepi atas, meniru
+     lapisan air yang menipis ke bawah pada jendela basah. Tidak beranimasi:
+     yang bergerak di konsol ini hanya hal yang memang berubah. */
+  .glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.12) 34%,
+      rgba(255, 255, 255, 0) 62%
+    );
+  }
+}
+
+@layer utilities {
+  /* Angka selalu monospace dan berlebar tetap (bagian 9 PRD).
+
+     Jarak hurufnya dirapatkan. Martian Mono jauh lebih lebar daripada mono
+     sebelumnya, dan konsol ini menaruh angka di kolom rapat — tanpa koreksi
+     ini, deret seperti "180 / 500 jiwa" dan "0.98 km" mulai membentur tepi
+     wadahnya. Tetap berlebar tetap: yang dirapatkan jarak antarhuruf, bukan
+     lebar glifnya, jadi digit masih tidak bergeser kolom saat waktu berjalan. */
+  .num,
+  .tnum {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    letter-spacing: -0.035em;
+  }
+
+  .label {
+    font-size: 11px;
+    line-height: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-mute);
+  }
+
+  /* Angka besar bergaya laporan.
+     Bobotnya naik lagi dari 400 ke 600 dan jaraknya dirapatkan. Di sinilah
+     sikap editorial itu tinggal: angka besar yang berat dan rapat, di sebelah
+     teks kecil yang tenang. Kalau semua ikut menebal, tidak ada yang menonjol
+     dan yang tersisa hanya bising. */
+  .figure {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* Judul kartu dan panggung: rapat, karena judul yang rapat terbaca sebagai
+     satu benda dan bukan deretan kata. Batas -0.04em tidak dilewati. */
+  .title-tight {
+    letter-spacing: -0.035em;
+  }
+
+  /* Penanda "hidup" pada titik status. Cincin ketat, bukan pendar: pada latar
+     terang pendar tidak terlihat, dan lingkaran warna di sekeliling titik 6 px
+     terbaca sebagai keadaan, bukan sebagai hiasan kedalaman. */
+  .glow-rain {
+    box-shadow: 0 0 0 3px rgba(31, 111, 208, 0.2);
+  }
+  .glow-signal {
+    box-shadow: 0 0 0 3px rgba(184, 114, 13, 0.22);
+  }
+  .glow-alert {
+    box-shadow: 0 0 0 3px rgba(195, 63, 38, 0.22);
+  }
+  .glow-ok {
+    box-shadow: 0 0 0 3px rgba(13, 125, 100, 0.2);
+  }
+
+  .gap-xs { gap: 4px; }
+  .gap-sm { gap: 8px; }
+  .gap-md { gap: 12px; }
+  .gap-lg { gap: 16px; }
+  .gap-xl { gap: 24px; }
+  .gap-xxl { gap: 32px; }
+}
+
+/* Fokus papan ketik terlihat jelas. Memakai `--rain` (4,95:1 di atas putih),
+   jauh di atas ambang 3:1 untuk penanda bukan-teks. */
+:focus-visible {
+  outline: 2px solid var(--rain);
+  outline-offset: 2px;
+}
+
+/* Batang gulir tipis */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 32, 51, 0.22) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(15, 32, 51, 0.2);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 32, 51, 0.34);
+  background-clip: content-box;
+}
+
+/* ---- penggeser waktu ------------------------------------------------------ */
+.scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+  height: 18px;
+  cursor: pointer;
+}
+/* Lintasan dibiarkan bening: batang dasar dan bagian yang sudah dilalui
+   digambar oleh Timeline sebagai dua lapisan di belakang input ini. Dengan
+   begitu penggesernya tetap satu <input type="range"> asli — bisa dipakai papan
+   ketik dan pembaca layar — tanpa lintasan bawaan yang menutupi warnanya. */
+.scrubber::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: transparent;
+}
+.scrubber::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: transparent;
+}
+.scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 3px solid var(--rain);
+  box-shadow: 0 1px 3px rgba(15, 32, 51, 0.32);
+}
+.scrubber::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 3px solid var(--rain);
+  box-shadow: 0 1px 3px rgba(15, 32, 51, 0.32);
+}
+
+/* ---- MapLibre disamakan dengan bahasa kartu ------------------------------- */
+.maplibregl-ctrl-attrib {
+  background: rgba(255, 255, 255, 0.86) !important;
+  color: var(--text-dim) !important;
+  font-family: var(--font-mono), ui-monospace, monospace !important;
+  font-size: 10px !important;
+  border-radius: 9999px !important;
+  padding: 2px 10px !important;
+  margin: 8px !important;
+}
+.maplibregl-ctrl-attrib a {
+  color: var(--text-mute) !important;
+}
+.maplibregl-ctrl-group {
+  background: rgba(255, 255, 255, 0.86) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  backdrop-filter: blur(10px) saturate(1.45);
+  box-shadow: 0 8px 20px -14px rgba(15, 32, 51, 0.42) !important;
+}
+.maplibregl-ctrl-group button {
+  width: 28px !important;
+  height: 28px !important;
+  background: transparent !important;
+}
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--hairline) !important;
+}
+/* Kanvas peta ikut mendapat tab-stop dari MapLibre, jadi ia wajib punya
+   penanda fokus. Sebelumnya `outline: none` di sini menang atas
+   `:focus-visible` karena kekhususannya lebih tinggi — pengguna papan ketik
+   berhenti di peta tanpa tanda apa pun. */
+.maplibregl-canvas:focus-visible {
+  outline: 2px solid var(--rain);
+  outline-offset: -2px;
+}
+
+/* ===========================================================================
+   Tepi logam pada tombol yang bisa ditekan
+   ===========================================================================
+   Kilau yang menyapu cincin tombol saat disorot dan mengunci saat ditekan.
+
+   DIBUAT DARI CSS, BUKAN SHADER. Versi aslinya memasang satu konteks WebGL per
+   tombol. Chrome hanya menyimpan sekitar 16 konteks per halaman, sedangkan
+   konsol ini menampilkan 25 sampai 40 tombol sekaligus — dan MapLibre ikut
+   antre di batas yang sama, jadi peta bisa kehilangan konteksnya di tengah
+   peragaan. Efek yang sama di tepinya bisa didapat dengan satu gradien kerucut
+   yang diputar, dan biayanya nyaris nol.
+
+   WARNANYA TINTA, BUKAN RONA BARU. Logam di sini dibuat dari --text pada
+   beberapa tingkat alfa. Tidak ada warna kelima yang masuk, dan tepi tombol
+   tetap bukan besaran yang diukur. */
+
+@property --metal-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes metal-sweep {
+  to {
+    --metal-angle: 360deg;
+  }
+}
+
+.metal-edge {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Cincinnya digambar sebagai lapisan sendiri lalu dilubangi bagian dalamnya
+   dengan mask, sehingga yang tersisa benar-benar hanya garis setebal 1px yang
+   mengikuti radius tombol — termasuk radius pil penuh. */
+.metal-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+  background: conic-gradient(
+    from var(--metal-angle),
+    rgb(var(--text-rgb) / 0.06) 0deg,
+    rgb(var(--text-rgb) / 0.55) 55deg,
+    rgb(var(--text-rgb) / 0.1) 120deg,
+    rgb(var(--text-rgb) / 0.42) 200deg,
+    rgb(var(--text-rgb) / 0.08) 275deg,
+    rgb(var(--text-rgb) / 0.55) 330deg,
+    rgb(var(--text-rgb) / 0.06) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.metal-edge:hover::before,
+.metal-edge:focus-visible::before {
+  opacity: 1;
+  animation: metal-sweep 2.4s linear infinite;
+}
+
+/* Ditekan: sapuannya berhenti dan tepinya mengeras. Berhenti, bukan makin
+   cepat — tombol yang sudah ditekan tidak sedang menunggu apa pun.
+
+   Memakai `:active`, bukan state React. Keadaan "sedang ditekan" sudah
+   dilacak peramban untuk tetikus maupun papan ketik, jadi menyalinnya ke
+   dalam state hanya menambah render ulang di setiap penekanan tombol. */
+.metal-edge:active::before {
+  opacity: 1;
+  animation: none;
+  padding: 1.5px;
+  background: conic-gradient(
+    from 210deg,
+    rgb(var(--text-rgb) / 0.12) 0deg,
+    rgb(var(--text-rgb) / 0.62) 90deg,
+    rgb(var(--text-rgb) / 0.18) 190deg,
+    rgb(var(--text-rgb) / 0.5) 300deg,
+    rgb(var(--text-rgb) / 0.12) 360deg
+  );
+}
+
+/* Tombol mati tidak berkilau: kilau berarti "ini bisa ditekan". */
+.metal-edge:disabled::before {
+  opacity: 0;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Kilaunya tetap muncul, hanya tidak lagi berputar — keadaan "bisa ditekan"
+     tidak boleh hilang hanya karena pengguna menolak gerak. */
+  .metal-edge:hover::before,
+  .metal-edge:focus-visible::before {
+    animation: none;
+    background: conic-gradient(
+      from 210deg,
+      rgb(var(--text-rgb) / 0.12) 0deg,
+      rgb(var(--text-rgb) / 0.55) 90deg,
+      rgb(var(--text-rgb) / 0.18) 190deg,
+      rgb(var(--text-rgb) / 0.45) 300deg,
+      rgb(var(--text-rgb) / 0.12) 360deg
+    );
+  }
+}

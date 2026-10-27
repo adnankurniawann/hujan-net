@@ -1,0 +1,4 @@
+# Ubin DEM mentah, ~26 MB per berkas. Bisa diunduh ulang kapan saja dengan
+# `python scripts/hydro/fetch_dem.py`, jadi tidak perlu disimpan di git.
+*.hgt
+*.hgt.gz

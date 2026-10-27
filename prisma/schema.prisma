@@ -1,0 +1,73 @@
+// Skema penyimpanan antrean peringatan (tugas C2).
+//
+// Hanya lapisan peringatan yang disimpan. Hasil simulasi TIDAK disimpan di sini:
+// simulasi bersifat deterministik dan dihitung ulang di memori sesuai A5, jadi
+// menyimpannya hanya menambah jalur kode yang bisa gagal saat demo.
+//
+// SQLite tidak mendukung enum di Prisma, jadi `level` dan `status` berupa String.
+// Nilai sahnya ditegakkan di `lib/alerts/`, bukan di basis data.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Path ditulis langsung, bukan lewat env("DATABASE_URL"), supaya proyek bisa
+// dijalankan tanpa langkah menyalin berkas .env. Panduan bagian 12 menuntut
+// "cara menjalankan dalam 3 perintah", dan ini bukan kredensial rahasia,
+// hanya berkas SQLite lokal.
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+/// Satu kandidat peringatan untuk satu DAS pada satu kali pelampauan ambang.
+///
+/// PENTING: baris di tabel ini TIDAK PERNAH berarti peringatan sudah disiarkan.
+/// Baris ini hanya berarti "ambang terlampaui, menunggu keputusan operator".
+/// Tidak ada tabel, kolom, maupun jalur kode di proyek ini yang menyiarkan apa pun.
+model Alert {
+  /// Id deterministik: "<eventId>:<catchmentId>:<level>:<raisedAtSec>".
+  /// Bentuk ini membuat pendeteksian ulang bersifat idempoten, sehingga memutar
+  /// ulang kejadian yang sama tidak menggandakan antrean.
+  id String @id
+
+  /// Pengenal kejadian simulasi. Memisahkan riwayat antar sesi demo.
+  eventId String
+
+  catchmentId String
+
+  /// "waspada" atau "siaga". Ini tingkat keparahan, bukan status alur kerja.
+  level String
+
+  /// Jendela akumulasi penentu: "accum1h", "accum3h", atau "accum6h".
+  windowKey String
+
+  /// Detik sejak awal kejadian simulasi, BUKAN waktu dinding.
+  /// Nilai inilah yang dipetakan ke `AlertCandidate.raisedAt` pada kontrak data.
+  raisedAtSec Int
+
+  /// Waktu dinding saat baris dibuat. Untuk jejak audit, tidak dipakai di antarmuka.
+  raisedAtWall DateTime @default(now())
+
+  /// Akumulasi pada jendela penentu saat ambang terlampaui, mm.
+  accumMm Float
+
+  /// Ambang siaga jendela penentu, mm.
+  thresholdMm Float
+
+  /// "menunggu", "dikonfirmasi", atau "diabaikan". Selalu lahir sebagai "menunggu".
+  status String @default("menunggu")
+
+  /// Diisi hanya lewat aksi operator yang eksplisit, baik konfirmasi maupun pengabaian.
+  /// Dipetakan ke `confirmedBy` dan `confirmedAt` pada kontrak data, yang hanya
+  /// menyediakan satu pasang bidang untuk kedua jenis keputusan.
+  decidedBy String?
+  decidedAt DateTime?
+
+  /// Catatan opsional dari operator saat mengabaikan, untuk jejak audit.
+  note String?
+
+  @@unique([eventId, catchmentId, level, raisedAtSec])
+  @@index([status])
+  @@index([catchmentId])
+}

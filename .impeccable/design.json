@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-30T00:00:00.000Z",
+  "title": "Design System: HujanNet Dashboard",
+  "extensions": {
+    "colorMeta": {
+      "rain": {
+        "role": "primary",
+        "displayName": "Rain Blue",
+        "canonical": "#1f6fd0",
+        "tonalRamp": ["#0a1c33", "#0d2f57", "#10437c", "#1557a4", "#1f6fd0", "#5d97e0", "#96c4f4", "#d6e7fb"]
+      },
+      "rain-text": {
+        "role": "primary",
+        "displayName": "Rain Blue Ink",
+        "canonical": "#0f5fb8",
+        "tonalRamp": ["#08192f", "#0a2950", "#0c3a72", "#0e4c95", "#0f5fb8", "#3f8bd9", "#84b7ee", "#cfe3f9"]
+      },
+      "signal": {
+        "role": "secondary",
+        "displayName": "Signal Amber",
+        "canonical": "#b8720d",
+        "tonalRamp": ["#2c1b03", "#4a2d05", "#6a4108", "#8e570a", "#b8720d", "#dd9930", "#eebd77", "#f8e4c2"]
+      },
+      "signal-text": {
+        "role": "secondary",
+        "displayName": "Signal Amber Ink",
+        "canonical": "#8a5206",
+        "tonalRamp": ["#221403", "#3a2204", "#523005", "#6c4006", "#8a5206", "#b8720d", "#e0a349", "#f4dcb4"]
+      },
+      "alert": {
+        "role": "tertiary",
+        "displayName": "Alert Clay",
+        "canonical": "#c33f26",
+        "tonalRamp": ["#2e0f07", "#4d1a0d", "#6f2614", "#9a331c", "#c33f26", "#dd7059", "#eda695", "#f8ddd5"]
+      },
+      "alert-text": {
+        "role": "tertiary",
+        "displayName": "Alert Clay Ink",
+        "canonical": "#b0311c",
+        "tonalRamp": ["#290b06", "#45140a", "#631d0e", "#8a2715", "#b0311c", "#d16450", "#e79d8b", "#f6dad2"]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Confirm Green",
+        "canonical": "#0d7d64",
+        "tonalRamp": ["#031f18", "#053528", "#074c3a", "#0a654e", "#0d7d64", "#25a686", "#6fc9b2", "#c2e9dd"]
+      },
+      "ok-text": {
+        "role": "tertiary",
+        "displayName": "Confirm Green Ink",
+        "canonical": "#096450",
+        "tonalRamp": ["#021813", "#032a21", "#053d30", "#075040", "#096450", "#0f9578", "#4ec2a5", "#b6e5d7"]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Overcast Paper",
+        "canonical": "#e4ebf2",
+        "tonalRamp": ["#0f2033", "#1d3a4f", "#2c4a63", "#597690", "#8ba4bb", "#b9cbdc", "#e4ebf2", "#f7fafc"]
+      },
+      "bg-deep": {
+        "role": "neutral",
+        "displayName": "Overcast Paper Deep",
+        "canonical": "#d3dce6",
+        "tonalRamp": ["#0d1c2c", "#1a3149", "#2b4a68", "#4c6b8a", "#7c96b0", "#a7bbcd", "#d3dce6", "#eef3f8"]
+      },
+      "shell": {
+        "role": "neutral",
+        "displayName": "Console Shell",
+        "canonical": "#f7fafc",
+        "tonalRamp": ["#101d28", "#1e3a52", "#31536d", "#5c7c96", "#8fa8bd", "#c0d1de", "#e8eef5", "#f7fafc"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#0f2033", "#22384f", "#3a5470", "#587292", "#8ba0b6", "#bccbd9", "#e8eef5", "#ffffff"]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Recessed Paper",
+        "canonical": "#f2f6fa",
+        "tonalRamp": ["#0f2033", "#20364c", "#36506b", "#546e8c", "#889eb4", "#bacada", "#e8eef5", "#f2f6fa"]
+      },
+      "surface-3": {
+        "role": "neutral",
+        "displayName": "Recessed Paper Deep",
+        "canonical": "#e8eef5",
+        "tonalRamp": ["#0e1e30", "#1f3448", "#345067", "#527088", "#86a0b3", "#b8ccd9", "#e8eef5", "#f5f9fc"]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#0f2033",
+        "tonalRamp": ["#050b12", "#0f2033", "#1b3550", "#2b4d70", "#47617a", "#7b93a9", "#b3c4d3", "#e4ebf2"]
+      },
+      "text-mute": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#47617a",
+        "tonalRamp": ["#0c1219", "#182533", "#26394d", "#365068", "#47617a", "#7690a8", "#a9bccd", "#dde6ee"]
+      },
+      "text-dim": {
+        "role": "neutral",
+        "displayName": "Dim Ink",
+        "canonical": "#546a7e",
+        "tonalRamp": ["#0e1419", "#1b2730", "#2a3c4a", "#3d5568", "#546a7e", "#7e94a6", "#adbfcc", "#dfe7ed"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Ink Hairline",
+        "canonical": "rgba(15, 32, 51, 0.12)",
+        "tonalRamp": ["rgba(15,32,51,0.07)", "rgba(15,32,51,0.12)", "rgba(15,32,51,0.22)", "rgba(15,32,51,0.34)"]
+      }
+    },
+    "typographyMeta": {
+      "figure-xl": { "displayName": "Figure XL", "purpose": "The single headline number of a report card. Weight 400, never 300 — hairline weights go pale on white." },
+      "figure-lg": { "displayName": "Figure LG", "purpose": "Secondary headline numbers on score and accuracy cards." },
+      "figure-md": { "displayName": "Figure MD", "purpose": "Default card figure size." },
+      "title": { "displayName": "Title", "purpose": "Product wordmark and card headings that are sentences rather than labels." },
+      "readout": { "displayName": "Readout", "purpose": "Live values in the top-bar stat pill, the map glass chip, and the transport clock." },
+      "body": { "displayName": "Body", "purpose": "Explanatory prose, empty-state hints, field values. Capped at 36-46ch." },
+      "label": { "displayName": "Label", "purpose": "Section labels, chips, and every button in the console. Uppercase, letter-spaced." }
+    },
+    "shadows": [
+      { "name": "card", "value": "0 1px 2px -1px rgba(15,32,51,0.10), 0 8px 20px -14px rgba(15,32,51,0.28)", "purpose": "Every card and panel. Offset plus spread so the card lifts rather than glows." },
+      { "name": "pill", "value": "0 1px 2px -1px rgba(15,32,51,0.08)", "purpose": "An active pill button only." },
+      { "name": "float", "value": "0 4px 8px -4px rgba(15,32,51,0.18), 0 24px 48px -24px rgba(15,32,51,0.40)", "purpose": "Elements floating above the stage." },
+      { "name": "shell", "value": "0 2px 6px -3px rgba(15,32,51,0.12), 0 32px 64px -32px rgba(15,32,51,0.34)", "purpose": "The console window resting on the sky wash." },
+      { "name": "glass", "value": "inset 0 1px 0 rgba(255,255,255,0.95), 0 2px 4px -2px rgba(15,32,51,0.18), 0 12px 28px -18px rgba(15,32,51,0.42)", "purpose": "Top-edge light catch plus directional contact shadow that make glass read as glass." },
+      { "name": "ring-rain", "value": "0 0 0 1px rgba(31,111,208,0.34), 0 8px 20px -14px rgba(31,111,208,0.42)", "purpose": "Selection ring on a rain-related surface." },
+      { "name": "state-ring", "value": "0 0 0 3px rgba(31,111,208,0.20)", "purpose": "Tight ring around a status dot. A state marker, not a glow; accent and alpha vary 0.20-0.22 per tone." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The only custom easing; used on control state and bar width transitions." },
+      { "name": "duration-control", "value": "150ms", "purpose": "Colour transitions on buttons, chips, and help dots." },
+      { "name": "duration-bar", "value": "200ms", "purpose": "Width transition on progress bars." },
+      { "name": "reduced-motion", "value": "0.01ms", "purpose": "All animation and transition durations collapse under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "fixed-desktop", "value": "1440px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ],
+    "backdrop": [
+      { "name": "glass", "value": "blur(10px) saturate(1.45)", "purpose": "The only blur value in the system. Saturation is raised because wet glass concentrates the colour behind it. Permitted only over a map or rain-field canvas." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Console Button (ghost / active)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The console's default trigger. Active state is ink, never an accent colour.",
+      "html": "<button class=\"ds-btn-ghost\">Perbandingan</button> <button class=\"ds-btn-ghost ds-is-active\" aria-pressed=\"true\">Peta Operasi</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 12px; border-radius: 9999px; border: 1px solid var(--border, rgba(15,32,51,0.12)); background: var(--surface, #ffffff); color: var(--text-mute, #47617a); font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; transition: color .15s cubic-bezier(0.16,1,0.3,1), background-color .15s cubic-bezier(0.16,1,0.3,1), border-color .15s cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost:hover { border-color: var(--border-strong, rgba(15,32,51,0.22)); background: var(--surface-2, #f2f6fa); color: var(--text, #0f2033); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--rain, #1f6fd0); outline-offset: 2px; } .ds-btn-ghost.ds-is-active { border-color: transparent; background: var(--text, #0f2033); color: var(--surface, #ffffff); box-shadow: 0 1px 2px -1px rgba(15,32,51,0.08); } .ds-btn-ghost:disabled { opacity: .4; cursor: not-allowed; }"
+    },
+    {
+      "name": "Console Button (danger)",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Destructive or dismissive action, e.g. rejecting an alert candidate.",
+      "html": "<button class=\"ds-btn-danger\">Tolak</button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; justify-content: center; height: 28px; padding: 0 12px; border-radius: 9999px; border: 1px solid rgba(195,63,38,0.45); background: rgba(195,63,38,0.10); color: var(--alert-text, #b0311c); font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; transition: background-color .15s cubic-bezier(0.16,1,0.3,1), border-color .15s cubic-bezier(0.16,1,0.3,1); } .ds-btn-danger:hover { border-color: rgba(195,63,38,0.70); background: rgba(195,63,38,0.16); } .ds-btn-danger:focus-visible { outline: 2px solid var(--rain, #1f6fd0); outline-offset: 2px; }"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "icon-button",
+      "description": "32px circular trigger in the top bar and transport. Always labelled.",
+      "html": "<button class=\"ds-icon-btn\" aria-label=\"Putar\"><svg width=\"11\" height=\"11\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><path d=\"M2.4 1.2l5.6 3.8-5.6 3.8z\" fill=\"currentColor\"></path></svg></button>",
+      "css": ".ds-icon-btn { display: inline-flex; align-items: center; justify-content: center; height: 32px; width: 32px; border-radius: 9999px; border: 1px solid var(--border, rgba(15,32,51,0.12)); background: var(--surface, #ffffff); color: var(--text-mute, #47617a); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; } .ds-icon-btn:hover { border-color: var(--border-strong, rgba(15,32,51,0.22)); background: var(--surface-2, #f2f6fa); color: var(--text, #0f2033); } .ds-icon-btn:focus-visible { outline: 2px solid var(--rain, #1f6fd0); outline-offset: 2px; } .ds-icon-btn[aria-pressed=\"true\"] { border-color: transparent; background: var(--text, #0f2033); color: var(--surface, #ffffff); }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Status, category, and marker pill. Accent tones use a 35-40% border over an 8-10% fill of the same hue.",
+      "html": "<span class=\"ds-chip ds-chip-alert\"><span class=\"ds-chip-dot\"></span>3 kandidat peringatan menunggu</span> <span class=\"ds-chip ds-chip-rain\">mm/jam</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; border: 1px solid var(--border, rgba(15,32,51,0.12)); color: var(--text-mute, #47617a); font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; } .ds-chip-dot { display: inline-block; height: 4px; width: 4px; border-radius: 9999px; background: currentColor; } .ds-chip-rain { border-color: rgba(31,111,208,0.35); background: rgba(31,111,208,0.08); color: var(--rain-text, #0f5fb8); } .ds-chip-alert { border-color: rgba(195,63,38,0.40); background: rgba(195,63,38,0.10); color: var(--alert-text, #b0311c); } .ds-chip-ok { border-color: rgba(13,125,100,0.35); background: rgba(13,125,100,0.08); color: var(--ok-text, #096450); } .ds-chip-signal { border-color: rgba(184,114,13,0.35); background: rgba(184,114,13,0.08); color: var(--signal-text, #8a5206); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The main layout unit: opaque paper, 14px corners, ink hairline border, lifted by an offset shadow.",
+      "html": "<section class=\"ds-card\"><header class=\"ds-card-head\"><span class=\"ds-label\">Skor Rekonstruksi</span></header><div class=\"ds-card-body\"><span class=\"ds-figure\">1.84<span class=\"ds-figure-unit\">mm/jam</span></span></div></section>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; border-radius: 14px; border: 1px solid var(--border, rgba(15,32,51,0.12)); background: var(--surface, #ffffff); box-shadow: 0 1px 2px -1px rgba(15,32,51,0.10), 0 8px 20px -14px rgba(15,32,51,0.28); } .ds-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px 12px; } .ds-card-body { padding: 0 20px 16px; } .ds-label { font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text-mute, #47617a); } .ds-figure { font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; font-weight: 400; font-size: 30px; line-height: 1; letter-spacing: -0.02em; color: var(--text, #0f2033); } .ds-figure-unit { margin-left: 8px; font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 400; letter-spacing: normal; color: var(--text-dim, #546a7e); }"
+    },
+    {
+      "name": "Glass Panel",
+      "kind": "custom",
+      "refersTo": "glass-panel",
+      "description": "Permitted only where a map or rain-field canvas sits behind it. Raised saturation, a 1px top light catch, and a directional contact shadow are what make it read as glass rather than blur.",
+      "html": "<div class=\"ds-glass\"><span class=\"ds-glass-label\">Tautan Basah</span><span class=\"ds-glass-value\">14<span class=\"ds-glass-unit\">/ 32</span></span></div>",
+      "css": ".ds-glass { position: relative; display: inline-flex; flex-direction: column; gap: 2px; padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.72); background: rgba(255,255,255,0.82); backdrop-filter: blur(10px) saturate(1.45); -webkit-backdrop-filter: blur(10px) saturate(1.45); box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 2px 4px -2px rgba(15,32,51,0.18), 0 12px 28px -18px rgba(15,32,51,0.42); } .ds-glass::after { content: \"\"; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.12) 34%, rgba(255,255,255,0) 62%); } .ds-glass-label { font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text-mute, #47617a); } .ds-glass-value { font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 14px; color: var(--signal-text, #8a5206); } .ds-glass-unit { margin-left: 4px; font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; color: var(--text-dim, #546a7e); }"
+    },
+    {
+      "name": "Simulation Badge",
+      "kind": "custom",
+      "refersTo": "simulation-badge",
+      "description": "Permanent, non-dismissible honesty marker on every simulated-data view.",
+      "html": "<span class=\"ds-sim-badge\"><span class=\"ds-sim-dot\"></span>Data Simulasi<span class=\"ds-sim-detail\">medan hujan sintetis</span></span>",
+      "css": ".ds-sim-badge { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 8px; border-radius: 9999px; border: 1px solid rgba(184,114,13,0.45); background: rgba(184,114,13,0.10); color: var(--signal-text, #8a5206); font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.16em; } .ds-sim-dot { display: inline-block; height: 6px; width: 6px; border-radius: 9999px; background: var(--signal, #b8720d); box-shadow: 0 0 0 3px rgba(184,114,13,0.22); } .ds-sim-detail { padding-left: 8px; border-left: 1px solid rgba(184,114,13,0.30); text-transform: none; letter-spacing: normal; color: var(--text-mute, #47617a); }"
+    },
+    {
+      "name": "Rain Legend",
+      "kind": "custom",
+      "refersTo": "glass-panel",
+      "description": "Glass panel over the map. Its gradient is sampled from the same rainColor() the heatmap uses, monotonic in lightness and alpha, darker as rain gets heavier.",
+      "html": "<div class=\"ds-legend\"><div class=\"ds-legend-head\"><span class=\"ds-legend-label\">Intensitas Hujan · Rekonstruksi</span><span class=\"ds-legend-unit\">mm/jam</span></div><div class=\"ds-legend-bar\"></div><div class=\"ds-legend-stops\"><span>0</span><span>10</span><span>20</span><span>35</span><span>50</span><span>≥60</span></div></div>",
+      "css": ".ds-legend { width: 300px; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.72); background: rgba(255,255,255,0.82); backdrop-filter: blur(10px) saturate(1.45); -webkit-backdrop-filter: blur(10px) saturate(1.45); box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 2px 4px -2px rgba(15,32,51,0.18), 0 12px 28px -18px rgba(15,32,51,0.42); } .ds-legend-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; } .ds-legend-label { font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text-mute, #47617a); } .ds-legend-unit { font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; color: var(--text-dim, #546a7e); } .ds-legend-bar { margin-top: 8px; height: 10px; width: 100%; border-radius: 9999px; border: 1px solid rgba(15,32,51,0.07); background-color: #ffffff; background-image: linear-gradient(to right, rgba(150,196,244,0) 0%, rgba(150,196,244,0.4) 5%, rgba(107,168,235,0.6) 16.7%, rgba(66,132,215,0.75) 33.3%, rgba(31,111,208,0.86) 58.3%, rgba(21,80,163,0.92) 83.3%, rgba(13,55,120,0.96) 100%); } .ds-legend-stops { margin-top: 6px; display: flex; justify-content: space-between; font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 10px; color: var(--text-dim, #546a7e); }"
+    },
+    {
+      "name": "Timeline Scrubber",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Pill-shaped transport bar. The track is drawn behind a real range input so keyboard and screen-reader behaviour survive; elapsed progress is flat ink because the timeline is a control, not a measurement.",
+      "html": "<div class=\"ds-timeline\"><span class=\"ds-tl-clock\">T+04:20<span class=\"ds-tl-total\">/ 60:00</span></span><div class=\"ds-tl-track\"><span class=\"ds-tl-base\"></span><span class=\"ds-tl-elapsed\"></span><span class=\"ds-tl-marker\"></span><input class=\"ds-tl-input\" type=\"range\" min=\"0\" max=\"3600\" value=\"260\" aria-label=\"Waktu kejadian\"></div></div>",
+      "css": ".ds-timeline { display: flex; align-items: center; gap: 16px; height: 56px; padding: 0 12px; border-radius: 9999px; border: 1px solid var(--border, rgba(15,32,51,0.12)); background: var(--surface, #ffffff); box-shadow: 0 1px 2px -1px rgba(15,32,51,0.10), 0 8px 20px -14px rgba(15,32,51,0.28); } .ds-tl-clock { font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 14px; color: var(--text, #0f2033); flex-shrink: 0; } .ds-tl-total { margin-left: 6px; font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; color: var(--text-dim, #546a7e); } .ds-tl-track { position: relative; display: flex; flex: 1; min-width: 180px; align-items: center; } .ds-tl-base { position: absolute; left: 0; right: 0; top: 50%; height: 4px; transform: translateY(-50%); border-radius: 9999px; background: rgba(15,32,51,0.12); } .ds-tl-elapsed { position: absolute; left: 0; top: 50%; width: 38%; height: 4px; transform: translateY(-50%); border-radius: 9999px; background: rgba(15,32,51,0.45); } .ds-tl-marker { position: absolute; left: 62%; top: 50%; height: 12px; width: 2px; transform: translateY(-50%); border-radius: 9999px; background: var(--alert, #c33f26); } .ds-tl-input { -webkit-appearance: none; appearance: none; position: relative; width: 100%; height: 18px; background: transparent; cursor: pointer; } .ds-tl-input::-webkit-slider-runnable-track { height: 4px; border-radius: 9999px; background: transparent; } .ds-tl-input::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 9999px; background: var(--surface, #ffffff); border: 3px solid var(--rain, #1f6fd0); box-shadow: 0 1px 3px rgba(15,32,51,0.32); } .ds-tl-input:focus-visible { outline: 2px solid var(--rain, #1f6fd0); outline-offset: 2px; }"
+    },
+    {
+      "name": "Gradient Meter",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Low-to-high error scale shared by the reconstruction score and catchment cards. Built from three existing status tokens; no fourth hue was invented for the midpoint.",
+      "html": "<div class=\"ds-meter\"><div class=\"ds-meter-bar\" role=\"img\" aria-label=\"Galat: sedang\"><span class=\"ds-meter-needle\"></span></div><div class=\"ds-meter-ticks\"><span>Baik</span><span>Sedang</span><span>Buruk</span></div></div>",
+      "css": ".ds-meter-bar { position: relative; height: 8px; width: 100%; border-radius: 9999px; background: linear-gradient(to right, var(--scale-low, #0d7d64) 0%, var(--scale-mid, #b8720d) 52%, var(--scale-high, #c33f26) 100%); } .ds-meter-needle { position: absolute; left: 44%; top: 50%; height: 16px; width: 4px; transform: translate(-50%, -50%); border-radius: 9999px; background: var(--text, #0f2033); box-shadow: 0 0 0 2px var(--surface, #ffffff); } .ds-meter-ticks { margin-top: 6px; display: flex; justify-content: space-between; font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim, #546a7e); }"
+    },
+    {
+      "name": "Stage Navigation",
+      "kind": "nav",
+      "refersTo": "pill-group",
+      "description": "The console's only navigation: a pill group of ghost buttons ordered by use, with the active stage filled in ink.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Tampilan panggung\"><button class=\"ds-nav-btn ds-is-active\" aria-pressed=\"true\">Peta Operasi</button><button class=\"ds-nav-btn\">Perbandingan</button><button class=\"ds-nav-btn\">Laporan</button></nav>",
+      "css": ".ds-nav { display: inline-flex; align-items: center; gap: 4px; height: 40px; padding: 0 4px; border-radius: 9999px; border: 1px solid rgba(15,32,51,0.07); background: var(--surface-2, #f2f6fa); } .ds-nav-btn { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 9999px; border: 1px solid var(--border, rgba(15,32,51,0.12)); background: var(--surface, #ffffff); color: var(--text-mute, #47617a); font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; } .ds-nav-btn:hover { border-color: var(--border-strong, rgba(15,32,51,0.22)); background: var(--surface, #ffffff); color: var(--text, #0f2033); } .ds-nav-btn:focus-visible { outline: 2px solid var(--rain, #1f6fd0); outline-offset: 2px; } .ds-nav-btn.ds-is-active { border-color: transparent; background: var(--text, #0f2033); color: var(--surface, #ffffff); box-shadow: 0 1px 2px -1px rgba(15,32,51,0.08); }"
+    },
+    {
+      "name": "Empty State",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Serious, non-joke empty state. Ringed glyph, uppercase title, one line of dim explanation capped at 36ch.",
+      "html": "<div class=\"ds-empty\"><span class=\"ds-empty-glyph\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" aria-hidden=\"true\"><circle cx=\"6\" cy=\"6\" r=\"5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1\"></circle><path d=\"M6 3.5v3.2\" stroke=\"currentColor\" stroke-width=\"1\" stroke-linecap=\"round\"></path><circle cx=\"6\" cy=\"8.8\" r=\"0.6\" fill=\"currentColor\"></circle></svg></span><p class=\"ds-empty-title\">Belum ada tautan dipilih</p><p class=\"ds-empty-hint\">Pilih satu tautan di peta untuk membaca pita redamannya.</p></div>",
+      "css": ".ds-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px 24px; text-align: center; } .ds-empty-glyph { display: flex; align-items: center; justify-content: center; height: 32px; width: 32px; border-radius: 9999px; border: 1px solid var(--border, rgba(15,32,51,0.12)); color: var(--text-dim, #546a7e); } .ds-empty-title { margin: 0; font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-mute, #47617a); } .ds-empty-hint { margin: 0; max-width: 36ch; font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; font-size: 11px; line-height: 20px; color: var(--text-dim, #546a7e); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Read Through Wet Glass",
+    "overview": "This is an operator console lit like an overcast afternoon. The ground is a cool blue-grey paper, the cards are opaque white, the lines are ink hairlines, and the only saturated colour on screen belongs to the thing being measured: the rain field on the map. Light was chosen from the room the console is used in — a BPBD operations room in daylight, and a judged hall with the lights on and a projector running. Both wash out a dark console. Light here is a decision with a reason attached, not a category default.\n\nThe material logic is literal. Glass appears only where something is actually being read *through* glass: a panel floating over the live map or over a rain-field canvas. Over flat colour, glass is not glass — it is blur, and blur over flat colour is decoration. Everything not floating over a canvas is opaque paper. That single distinction is what keeps the world from collapsing into the generic frosted-panel look it would otherwise become.\n\nDensity is high and unapologetic: this is an instrument, not a landing page. Type runs small (10px and 11px carry most of the interface) so that big monospace figures can mean something when they appear. Colour is rationed to two data accents plus two status colours, and \"this control is active\" is expressed in ink rather than hue — because an active tool is not a measured quantity and must not look like one.",
+    "keyCharacteristics": [
+      "Daylight-overcast light ground (#e4ebf2 → #d3dce6), a single vertical sky wash, no colour blobs",
+      "Exactly two data accents: blue --rain (inferred weather) and amber --signal (what the radio measured)",
+      "Active state is ink, never accent colour",
+      "Glass only over map or field canvas; everywhere else, opaque paper",
+      "Every numeral in JetBrains Mono, tabular, with its unit written out",
+      "Fixed 1440px single-screen desktop; only stage content scrolls",
+      "Undefined metrics render as —"
+    ],
+    "rules": [
+      { "name": "The Two Accents Rule", "body": "There are exactly two data colours: rain for the weather quantity inferred, signal for the quantity the radio measured. alert and ok are status and carry no measurement meaning. A fifth hue is a bug, not a variant.", "section": "colors" },
+      { "name": "The Ink Active Rule", "body": "\"This control is active\" is drawn in ink (text on surface), never in an accent. A violet once carried both \"active\" and \"this is data\" and therefore taught the operator nothing; it was deleted and must not return under another name.", "section": "colors" },
+      { "name": "The Alpha Channel Rule", "body": "Only text, rain, rain-text, signal, signal-text, alert, alert-text, ok, and ok-text are declared as RGB channels and therefore accept alpha modifiers (bg-text/12, bg-rain/8). text-mute, text-dim, border, hairline, and the surfaces are plain var() strings: writing text-mute/60 produces invalid CSS that disappears with no warning. If a muted ink needs transparency, use text with an alpha instead.", "section": "colors" },
+      { "name": "The Darker-Is-Heavier Rule", "body": "The rain ramp (components/map/colorRamp.ts) is one hue, monotonic in both lightness and alpha, and on this light ground it runs pale blue → ink blue as intensity rises. Heavier rain is darker, never brighter. The map, both comparison canvases, and the legend all read from that one function, so they cannot drift apart.", "section": "colors" },
+      { "name": "The Mono Numeral Rule", "body": "Every number, unit, link ID, coordinate, and clock is JetBrains Mono with tabular figures. There is no exception for \"just one number in a sentence\".", "section": "typography" },
+      { "name": "The Written Unit Rule", "body": "A number never ships bare. The unit (dB, mm/jam, GHz, km) is written next to it in Inter at one step smaller in dim ink. When a quantity is genuinely dimensionless, the unit slot stays empty and the name goes in the label — it is never filled with a letter that could be misread as a unit.", "section": "typography" },
+      { "name": "The Em Dash Rule", "body": "An undefined metric renders as —. Never 0, never 100 %. Metrics whose type is number | null (agreement, correlation, cell hit rate) exist precisely so the null can reach the screen intact.", "section": "typography" },
+      { "name": "The Glass-Over-Canvas Rule", "body": ".glass may be applied only where a map or a rain-field canvas is physically behind it — today the map stat chip, the rain legend, and the MapLibre zoom control. Over flat colour it is not glass, only blur. The shell and every card are opaque paper. This is the single most abusable class in the system; the audit test is one question: is there a moving canvas behind this element right now?", "section": "elevation" },
+      { "name": "The Earned Shadow Rule", "body": "Shadows belong to things that float. A divider inside a card is a 1px hairline. Glows with zero offset, and shadows tinted with an accent colour, do not exist here.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do treat rain as the inferred weather quantity and signal as what the radio measured, and keep alert / ok for status only.",
+      "Do render active state as ink fill on white (bg-text text-surface).",
+      "Do set every number in JetBrains Mono with tabular figures and its unit written out beside it.",
+      "Do render an undefined metric as —, and give any metric that can be undefined a number | null type so the null survives to the screen.",
+      "Do use .glass only when a map or rain-field canvas is behind the element; use opaque .card everywhere else.",
+      "Do keep layout spacing on the 4px rhythm and reserve 2/6/10/14 for dense in-component spacing.",
+      "Do draw internal divisions as 1px ink hairlines and reserve shadows for things that float.",
+      "Do make nested surfaces darker than their parent, never lighter.",
+      "Do read every rain colour from rainColor() in components/map/colorRamp.ts so map, comparison, and legend cannot diverge.",
+      "Do write section labels as 10px uppercase Inter at 0.16em tracking, and buttons at 0.12em.",
+      "Do keep Indonesian UI copy throughout, including empty and loading states, and write those states seriously."
+    ],
+    "donts": [
+      "Don't reintroduce --violet or add a fifth hue under any name; if a new state needs distinguishing, use ink, weight, or shape.",
+      "Don't apply an alpha modifier to text-mute, text-dim, border, hairline, or any surface token — those are plain var() strings and the class will vanish silently. Use text/<n> instead.",
+      "Don't use .glass over flat colour, including the shell, cards, dialogs, and the right rail.",
+      "Don't exceed a 14px radius on a container or use anything but a full pill on a trigger.",
+      "Don't add a decorative gradient, colour blob, or accent-tinted glow; the sky wash, the error meter, and the rain ramp are the only gradients, and all three encode something.",
+      "Don't make heavier rain lighter — the ramp must stay monotonic in lightness and alpha in the darker-is-heavier direction.",
+      "Don't animate anything that is not actually changing; transitions are 150ms colour on controls and 200ms width on bars, and prefers-reduced-motion is honoured globally.",
+      "Don't render the same metric in more than two encodings on one screen, or add a stat row that carries no decision.",
+      "Don't hide or gate the DATA SIMULASI marker on any simulated-data view.",
+      "Don't introduce a new text colour without checking it at >= 4.5:1 against all four card grounds.",
+      "Don't add an emoji or a decorative icon; every icon in the console draws a real object (towers and a link, a bell, transport glyphs)."
+    ]
+  }
+}

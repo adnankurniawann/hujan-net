@@ -1,0 +1,18 @@
+{
+  "$comment": [
+    "Konfigurasi panel perbandingan kerapatan (tugas C4).",
+    "",
+    "Jumlah tautan TIDAK ditulis di sini. Angka itu dihitung langsung dari",
+    "data/links.json supaya tidak pernah basi ketika topologi tautan berubah.",
+    "",
+    "PERINGATAN SEBELUM DEMO. Nilai rainGaugeCount di bawah adalah perkiraan kerja,",
+    "bukan angka yang sudah diverifikasi dari basis data BMKG. Jangan sebutkan ke juri",
+    "sebagai fakta terverifikasi sebelum ada yang memeriksanya. Isi sourceLabel dengan",
+    "rujukan yang benar begitu angkanya dipastikan, lalu ubah verified menjadi true."
+  ],
+  "enabled": true,
+  "rainGaugeCount": 3,
+  "verified": false,
+  "sourceLabel": "Perkiraan kerja: pos pengamatan hujan hulu Ciliwung, belum diverifikasi",
+  "bboxLabel": "Kotak batas sama dengan data/links.json"
+}
