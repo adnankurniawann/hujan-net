@@ -5,7 +5,7 @@
  * Kriteria B5 "kedua peta memakai skala warna yang sama persis" dijamin oleh
  * fakta bahwa keduanya memanggil fungsi ini, bukan oleh kedisiplinan.
  *
- * Bentuknya sesuai bagian 6 Panduan.md: bening pada 0 mm/jam sampai biru
+ * Bentuknya sesuai DESIGN.md: bening pada 0 mm/jam sampai biru
  * hujan pekat pada 60 mm/jam ke atas. Satu rona saja, berubah monoton pada
  * kecerahan dan alfa sekaligus, sehingga urutannya tetap terbaca pada cetak
  * abu-abu dan bagi mata yang lemah membedakan warna.

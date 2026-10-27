@@ -120,5 +120,5 @@ sejalan.
 ## Catatan kejujuran
 
 Yang nyata di sini adalah **batas DAS dan topografinya**. Redaman tautan, medan
-hujan, dan jaringan menara tetap simulasi — lihat `PRODUCT.md`. Mengganti batas DAS
+hujan, dan jaringan menara tetap simulasi — lihat `ARSITEKTUR.md` bagian 2. Mengganti batas DAS
 tidak membuat satu pun angka RMSE menjadi hasil pengukuran lapangan.

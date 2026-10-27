@@ -38,7 +38,7 @@ interface CoefficientRow {
  * Kesalahan itu TIDAK PERNAH TERLIHAT pada angka mutu kami, karena model maju
  * dan model invers memanggil fungsi yang sama, sehingga kesalahannya saling
  * meniadakan dengan tepat. Itu wujud nyata inverse crime: galat yang hanya
- * muncul begitu bertemu data lapangan. Lihat PENJELASAN.md bagian 9.
+ * muncul begitu bertemu data lapangan. Lihat ARSITEKTUR.md bagian 9.3.
  *
  * Rentangnya kini 7 sampai 40 GHz, bukan 10 sampai 40. Alasannya OpenMRG, yang
  * dipakai pada Lapis 3, memuat tautan mulai 7 GHz. Dengan tabel lama, tautan

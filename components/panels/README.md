@@ -142,4 +142,4 @@ tetap bekerja.
 
 Angka pada bagian Verifikasi di atas diukur pada `t = 5400 s`, di luar rentang
 kejadian contoh yang panjangnya 3600 detik, jadi jangan dipakai sebagai acuan
-tampilan demo. Angka demo yang berlaku ada di `CATATAN-SULTAN.md` bagian 4.
+tampilan demo. Angka kejadian demo yang berlaku ada di `ARSITEKTUR.md` bagian 9.

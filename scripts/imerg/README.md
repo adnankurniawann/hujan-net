@@ -4,8 +4,8 @@
 **sungguhan**, supaya rantai invers diuji pada struktur yang benar benar akan
 ditemuinya di Indonesia.
 
-Ini menutup satu kelemahan yang disebut di [`PENJELASAN.md`](../../PENJELASAN.md)
-bagian 8: medan Gauss kita halus, dan interpolasi kita mengasumsikan hujan itu
+Ini menutup satu kelemahan dasbor simulasi (lihat [`ARSITEKTUR.md`](../../ARSITEKTUR.md)
+bagian 7): medan Gauss kita halus, dan interpolasi kita mengasumsikan hujan itu
 halus, jadi kita menguji metode pada medan yang paling ramah terhadap asumsinya
 sendiri.
 

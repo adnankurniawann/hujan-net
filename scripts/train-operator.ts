@@ -194,7 +194,7 @@ function framesOf(
  * Ini protokol yang sama persis dengan `Diagnostics.meanRmse` pada
  * `lib/inverse/index.ts`, yaitu 241 langkah waktu termasuk awal dan akhir yang
  * cerah. Dipakai untuk badai bernama supaya angka IDW yang dilaporkan di sini
- * bisa langsung dicocokkan dengan angka pada PENJELASAN.md.
+ * bisa langsung dicocokkan dengan angka pada ARSITEKTUR.md bagian 9.
  */
 function framesOfFullEvent(storm: StormConfig): Frame[] {
   return framesOf(storm, { stride: 1, minPeak: -1 });
@@ -221,7 +221,7 @@ const PEAK_MIN_MM_H = 10;
  * RMSE dirata ratakan secara ARITMETIK antar langkah waktu, persis seperti
  * `Diagnostics.meanRmse` pada `lib/inverse/index.ts`. Bukan rata rata kuadrat.
  * Ini penting: kalau agregasinya berbeda, angka IDW di sini tidak akan cocok
- * dengan angka pada PENJELASAN.md dan seluruh perbandingan jadi tidak sah.
+ * dengan angka pada ARSITEKTUR.md bagian 9 dan seluruh perbandingan jadi tidak sah.
  */
 function score(frames: Frame[], predict: (f: Frame) => GridField): Score {
   let rmseSum = 0;
@@ -292,7 +292,7 @@ for (let i = 0; i < TRAIN_STORMS; i++) trainFrames.push(...framesOf(randomStorm(
 console.log(`  latih    : ${TRAIN_STORMS} badai -> ${trainFrames.length} cuplikan`);
 
 // Validasi dan uji TIDAK disaring: seluruh langkah waktu ikut dinilai, termasuk
-// awal dan akhir yang cerah, sama seperti protokol PENJELASAN.md. Penyaringan
+// awal dan akhir yang cerah, sama seperti protokol ARSITEKTUR.md bagian 8. Penyaringan
 // hanya berlaku untuk contoh latih, dan di sana pun hanya demi kecepatan:
 // karena operatornya tanpa intersep, cuplikan yang seluruh tautannya nol tidak
 // menyumbang apa pun ke matriks Gram.
@@ -355,7 +355,7 @@ console.log("\n" + "=".repeat(72));
 console.log("BADAI BERNAMA — tidak satu pun ikut melatih");
 console.log("=".repeat(72) + "\n");
 
-console.log("  Dinilai pada SELURUH 241 langkah waktu, protokol sama dengan PENJELASAN.md,");
+console.log("  Dinilai pada SELURUH 241 langkah waktu, protokol sama dengan ARSITEKTUR.md,");
 console.log("  sehingga kolom IDW di bawah bisa langsung dicocokkan dengan dokumen itu.\n");
 console.log("  skenario                        IDW    terlatih   perubahan");
 for (const { name, storm } of NAMED_STORMS) {

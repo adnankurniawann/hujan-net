@@ -25,7 +25,7 @@
     "dan babak 1:50 pada skenario demo, yaitu kandidat peringatan muncul lalu operator",
     "mengkonfirmasi, tidak pernah terjadi.",
     "",
-    "Menaikkan peakMmH di scenario.ts bukan jalan keluarnya: ARSITEKTUR.md bagian 8.2",
+    "Menaikkan peakMmH di scenario.ts bukan jalan keluarnya: ARSITEKTUR.md bagian 9.5",
     "menyatakan itu akan membuat angka RMSE yang kita sebutkan ke juri tidak lagi benar.",
     "",
     "Jadi ambangnya yang diskalakan. Faktornya dipisah sebagai demoScale, BUKAN dengan",

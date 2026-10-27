@@ -2,7 +2,7 @@
 //
 // KENAPA BERKAS INI ADA
 //
-// Anggaran galat pada PENJELASAN.md bagian 6 menunjukkan hal yang sangat spesifik:
+// Anggaran galat pada ARSITEKTUR.md bagian 9.1 menunjukkan hal yang sangat spesifik:
 // galat inversi per tautan hanya 0,73 mm/jam, sedangkan galat peta akhir 3,41.
 // Artinya 98 persen galat lahir di satu langkah saja, yaitu penyebaran nilai
 // rata rata lintasan menjadi bidang, `lib/inverse/field.ts`.

@@ -2,7 +2,7 @@
  * `cn` — penggabung nama kelas.
  *
  * Versi shadcn memakai `clsx` + `tailwind-merge`. Keduanya tidak dipasang di
- * sini: PRODUCT.md melarang dependensi baru tanpa kesepakatan tim, dan satu
+ * sini: menambah dua dependensi tidak sepadan, karena satu
  * satunya hal yang dibutuhkan komponen adalah menggabung string.
  *
  * BATASNYA HARUS DIKETAHUI. Fungsi ini TIDAK menyelesaikan kelas Tailwind yang

@@ -358,7 +358,7 @@ An 8px accent circle with a 3px state ring. Colour is never the sole carrier of 
 - **Don't** add an emoji or a decorative icon; every icon in the console draws a real object (towers and a link, a bell, transport glyphs).
 
 <!--
-Discrepancy noted against PRODUCT.md, recorded rather than canonized: the map
+Discrepancy recorded rather than canonized: the map
 stat chip in components/Dashboard.tsx renders RMSE as `(metrics?.rmse ?? 0)
 .toFixed(2)`, which prints `0.00` when the metric is undefined. The Em Dash Rule
 above is the system rule (the top bar and the primitives follow it); the chip is
