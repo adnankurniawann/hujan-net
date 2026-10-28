@@ -16,6 +16,7 @@ import {
   BASEMAP_GROUND,
   BASEMAP_PAINT,
   BASEMAP_TILES,
+  hasWebGl2,
   LINK_DIM_WITH_ROUTE,
 } from "./basemap";
 import { canvasColor, inkCanvasColor, paperCanvasColor } from "./canvasTokens";
@@ -115,6 +116,7 @@ export default function RainMap({
   /** Ujung tautan dalam piksel layar, hasil proyeksi terakhir; dipakai uji klik. */
   const hitRef = useRef<{ id: string; ax: number; ay: number; bx: number; by: number }[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [noWebGl, setNoWebGl] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const statusById = useMemo(
@@ -632,6 +634,10 @@ export default function RainMap({
   useEffect(() => {
     const container = containerRef.current;
     if (!container || mapRef.current) return;
+    if (!hasWebGl2()) {
+      setNoWebGl(true);
+      return;
+    }
 
     const map = new MapLibreMap({
       container,
@@ -717,7 +723,9 @@ export default function RainMap({
       <canvas ref={overlayRef} className="pointer-events-none absolute inset-0" />
       {!loaded ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-bg-deep">
-          <span className="text-2xs uppercase tracking-label text-text-dim">Memuat peta…</span>
+          <span className="text-2xs uppercase tracking-label text-text-dim">
+            {noWebGl ? "Peta butuh WebGL2, tidak tersedia di peramban ini" : "Memuat peta…"}
+          </span>
         </div>
       ) : null}
     </div>

@@ -16,6 +16,7 @@ import {
   BASEMAP_GROUND,
   BASEMAP_PAINT,
   BASEMAP_TILES,
+  hasWebGl2,
 } from "@/components/map/basemap";
 import {
   inkCanvasColor,
@@ -247,7 +248,7 @@ export default function EvacuationRouteModal({ route, post, snapshot, bbox, onCl
   useEffect(() => {
     const container = containerRef.current;
     const initial = drawDataRef.current.route;
-    if (!container || mapRef.current || !initial) return;
+    if (!container || mapRef.current || !initial || !hasWebGl2()) return;
 
     const map = new MapLibreMap({
       container,

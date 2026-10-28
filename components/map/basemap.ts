@@ -115,3 +115,11 @@ export function basemapTileUrl(z: number, x: number, y: number): string {
   const host = ["a", "b", "c"][Math.abs(x + y) % 3];
   return `https://${host}.basemaps.cartocdn.com/rastertiles/voyager/${z}/${x}/${y}@2x.png`;
 }
+
+/**
+ * MapLibre 6 butuh WebGL2. Tanpanya konstruktor melempar galat dan `remove()`
+ * ikut gagal saat dibongkar, yang menjatuhkan seluruh dasbor. Periksa dulu.
+ */
+export function hasWebGl2(): boolean {
+  return !!document.createElement("canvas").getContext("webgl2");
+}
