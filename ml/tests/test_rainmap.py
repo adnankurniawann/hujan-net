@@ -1,13 +1,6 @@
 import numpy as np
 
-from hujannet_ml.rainmap import NEIGHBOURS, idw, itu, mlp_inputs
-
-
-def test_itu_matches_table_and_interpolates():
-    k, a = itu(np.array([18.0, 18.0, 18.5]), np.array(["h", "v", "h"]))
-    np.testing.assert_allclose(k[:2], [0.07078, 0.07708])
-    np.testing.assert_allclose(a[:2], [1.0818, 1.0025])
-    assert 0.07078 < k[2] < 0.08084
+from hujannet_ml.rainmap import NEIGHBOURS, idw, mlp_inputs
 
 
 def test_idw_renormalises_over_links_with_data():

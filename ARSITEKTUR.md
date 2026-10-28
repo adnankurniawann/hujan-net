@@ -331,6 +331,28 @@ basah/kering CNN, antena basah 1,5 dB, ITU k-alpha.
   MLP hanya melihat jarak dan hujan tetangga, jadi bisa dipakai pada jaringan dasbor tanpa
   dilatih ulang.
 
+### 9.8 Kalibrasi taksiran per tautan
+
+`ml/hujannet_ml/calibrate.py`, hasil lengkap di [ml/results/calibrate.md](ml/results/calibrate.md).
+
+- **Tautan di bawah 1 km adalah sumber galat utama.** Dengan angka dasbor (ITU, antena
+  basah 1,5 dB), tautan ≤ 1 km menaksir 2–10 kali hujan radar dan menyumbang 84 % galat
+  kuadrat di OpenMRG, 62 % di OpenRainER. Satu langkah kuantisasi pada lintasan 300 m sudah
+  terbaca puluhan mm/jam. Tautan 4 km ke atas sudah hampir tanpa bias tanpa kalibrasi.
+- **Meminimalkan RMSE langsung adalah sasaran yang salah.** Hasilnya menyusutkan semua
+  taksiran ke 16–26 % total radar, dan akumulasi DAS ikut terlalu rendah. Yang dipakai:
+  per WAA, pengali k dipilih supaya total taksiran sama dengan radar di bulan latih.
+- Setelah tautan < 1 km dibuang, kalibrasi menurunkan RMSE basah per tautan dari 3,8 ke
+  2,7–2,8 mm/jam. Angkanya berbeda per iklim: pengali k 2,8 di Swedia, 2,1 di Italia.
+  Angka Swedia yang dipakai di Italia membuat total hujan 31 % terlalu rendah, jadi
+  **jaringan Indonesia perlu disetel dengan radar atau penakar Indonesia sendiri.**
+- Pada peta OpenMRG (RMSE waktu basah): IDW turun dari 2,75 ke 2,61 setelah tautan pendek
+  dibuang, lalu ke 2,41 setelah kalibrasi. MLP 2,48 → 2,45 dan ridge tetap sekitar 2,32.
+  Dengan masukan terkalibrasi, keunggulan MLP atas IDW hilang; perbaikan masukan lebih
+  berguna daripada interpolator yang lebih pintar.
+- Galat masih jauh dari masukan sempurna (1,5–1,6), karena korelasi per tautan hanya
+  sekitar 0,5. Itu batas berikutnya.
+
 ---
 
 ## 10. Cara kerja
