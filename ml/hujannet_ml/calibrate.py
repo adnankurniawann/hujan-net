@@ -1,7 +1,8 @@
 """Kalibrasi taksiran hujan per tautan: redaman antena basah dan skala k ITU.
 
 Jalankan (setelah openmrg, openrainer, wetdry features, dan cnn):
-  uv run python -m hujannet_ml.calibrate
+  uv run python -m hujannet_ml.calibrate          # setel dan nilai
+  uv run python -m hujannet_ml.calibrate align    # ukur ulang WINDOW_START_MIN, ~10 menit
 
 Taksiran per tautan: R = (max(A - WAA, 0) / L / (c * k))^(1/alpha) saat CNN bilang
 basah, 0 saat kering. k dan alpha dari ITU-R P.838-3. Dua angka disetel pada bulan
@@ -15,6 +16,10 @@ dengan RMSE terkecil. Meminimalkan RMSE langsung tidak dipakai: dengan korelasi
 per tautan sekitar 0,5, itu menyusutkan semua taksiran ke separuhnya, dan akumulasi
 DAS untuk peringatan banjir ikut terlalu rendah.
 
+Jendela CML dijajarkan dengan periode yang diwakili radar (WINDOW_START_MIN),
+bukan hanya menit sebelum cap waktu seperti pada klasifikasi basah/kering: di
+OpenMRG cap waktu radar mewakili beberapa menit SESUDAHNYA.
+
 Tautan di bawah MIN_LINK_KM dibuang: satu langkah kuantisasi pada lintasan 300 m
 sudah terbaca puluhan mm/jam (rincian per panjang ada di laporan).
 
@@ -24,17 +29,22 @@ kalibrasi ulang dengan data Indonesia.
 """
 
 import json
+import sys
 
 import numpy as np
 import pandas as pd
 
 from .cnn import chunk_rows, load, meta_inputs, predict, sequences
-from .wetdry import FEATURE_DIR, RESULTS_DIR, SPLITS, iter_chunks
+from .wetdry import FEATURE_DIR, RESULTS_DIR, SPLITS, dip_minutes, iter_chunks
 
 DEFAULT = {"waa_db": 1.5, "k_scale": 1.0}  # lib/inverse/waa.ts, lib/physics/itu838.ts
 WAA_GRID = np.arange(0, 3.01, 0.25)
 MIN_LINK_KM = 1.0
 LENGTH_BINS_KM = [0, 0.5, 1, 2, 4, 8, 30]
+# Awal jendela CML relatif terhadap cap waktu radar, menit; panjangnya jendela label
+# (5 menit OpenMRG, 15 OpenRainER). Dipilih dari korelasi tertinggi, lihat results/alignment.md.
+WINDOW_START_MIN = {"openmrg": 1, "openrainer": -15}
+ALIGN_MONTHS = {"openrainer": ("202106", "202107", "202108", "202109")}  # cukup satu musim hujan konvektif
 
 # ITU-R P.838-3, sama dengan lib/physics/itu838.ts: frekuensi GHz, kH, alphaH, kV, alphaV.
 P838 = np.array([
@@ -80,12 +90,19 @@ def link_rows(name: str) -> pd.DataFrame:
                 break
             continue
         rows, dip, pos = chunk_rows(loss, meta, ref, window)
+        end = pos + WINDOW_START_MIN[name] + window  # menit terakhir jendela + 1
+        rows, end = rows[end <= len(dip)].reset_index(drop=True), end[end <= len(dip)]
         link = rows.link_idx.to_numpy()
-        p = np.concatenate([predict(net, sequences(dip, pos[i:i + 200_000], link[i:i + 200_000]), meta_inputs(rows.iloc[i:i + 200_000]))
+        with np.errstate(invalid="ignore"):
+            dip_mean = np.nanmean(dip[end[:, None] - window + np.arange(window), link[:, None]], 1)
+        ok = np.isfinite(dip_mean)
+        rows, end, link, dip_mean = rows[ok].reset_index(drop=True), end[ok], link[ok], dip_mean[ok]
+        # CNN melihat 120 menit yang berakhir di ujung jendela yang sama
+        p = np.concatenate([predict(net, sequences(dip, end[i:i + 200_000], link[i:i + 200_000]), meta_inputs(rows.iloc[i:i + 200_000]))
                             for i in range(0, len(rows), 200_000)])
         k, alpha = itu(rows.freq_ghz.to_numpy(), meta.pol.to_numpy()[link])
         parts.append(pd.DataFrame({
-            "time": rows.time, "cml": meta.cml_id.to_numpy()[link], "dip": rows.dip_mean.to_numpy(np.float32),
+            "time": rows.time, "cml": meta.cml_id.to_numpy()[link], "dip": dip_mean.astype(np.float32),
             "wet": p > thr, "length_km": rows.length_km.to_numpy(np.float32),
             "k": k.astype(np.float32), "alpha": alpha.astype(np.float32), "oracle": rows.ref_mm_h.to_numpy(np.float32),
         }))
@@ -153,6 +170,34 @@ def by_length(rows: pd.DataFrame) -> dict[str, dict[str, float]]:
     return dict(sorted(out.items(), key=lambda kv: float(kv[0].strip("(]").split(",")[0])))
 
 
+def alignment() -> None:
+    """Korelasi rata-rata selisih redaman vs radar sepanjang lintasan, untuk tiap awal jendela."""
+    acc = {}
+    for name, part, loss, meta, ref, window in iter_chunks():
+        if part not in ALIGN_MONTHS.get(name, (part,)):
+            continue
+        dip = dip_minutes(loss)
+        y = ref.reindex(columns=meta.cml_id).to_numpy()
+        for start in range(-2 * window, window + 1, max(1, window // 5)):
+            m = dip.rolling(window, min_periods=1).mean().shift(-(start + window - 1)).reindex(ref.index).to_numpy()
+            ok = np.isfinite(m) & np.isfinite(y)
+            x, z = m[ok].astype(np.float64), y[ok].astype(np.float64)
+            a = acc.setdefault(name, {}).setdefault(start, np.zeros(6))
+            a += [len(x), x.sum(), z.sum(), (x * x).sum(), (z * z).sum(), (x * z).sum()]
+        print(f"jajar {name} {part}")
+    lines = ["# Penjajaran jendela CML terhadap radar", "",
+             "Korelasi rata-rata selisih redaman per sub-link dengan radar sepanjang lintasan, "
+             "untuk tiap awal jendela relatif terhadap cap waktu radar.", ""]
+    for name, by_start in acc.items():
+        lines += [f"## {name}", "", "| Awal jendela (menit) | Korelasi |", "|---|---|"]
+        for start, (n, sx, sz, sxx, szz, sxz) in sorted(by_start.items()):
+            r = (sxz - sx * sz / n) / np.sqrt((sxx - sx * sx / n) * (szz - sz * sz / n))
+            lines.append(f"| {start:+d} | {r:.3f} |")
+        lines.append("")
+    (RESULTS_DIR / "alignment.md").write_text("\n".join(lines))
+    print("\n".join(lines))
+
+
 def main() -> None:
     params, tests, lengths = {}, {}, {}
     for name in SPLITS:
@@ -192,4 +237,4 @@ def write_report(results: dict) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    alignment() if sys.argv[1:] == ["align"] else main()

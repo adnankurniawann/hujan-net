@@ -313,46 +313,47 @@ demo, yang diskalakan adalah ambangnya (`demoScale` di `catchment-config.json`).
 
 `ml/hujannet_ml/rainmap.py`, hasil lengkap di [ml/results/rainmap.md](ml/results/rainmap.md).
 OpenMRG (364 CML, Gothenburg), dinilai pada 582 sel radar 2 km yang berjarak paling jauh
-2 km dari suatu lintasan, uji Agustus 2015. Hujan per tautan ditaksir dari CML saja:
-basah/kering CNN, antena basah 1,5 dB, ITU k-alpha.
+2 km dari suatu lintasan, uji Agustus 2015. Hujan per tautan ditaksir dari CML saja
+(basah/kering CNN, lalu ITU k-alpha), jendelanya dijajarkan dengan radar (9.8).
 
-| RMSE waktu basah (mm/jam) | Masukan dari CML | Masukan sempurna |
-|---|---|---|
-| IDW, seperti dasbor | 2,75 | 1,59 |
-| Ridge tautan → sel, terikat topologi | **2,33** | **1,48** |
-| MLP per sel, 8 tautan terdekat + IDW | 2,48 | 1,54 |
+| RMSE waktu basah (mm/jam) | CML, semua tautan | CML, tautan ≥ 1 km | CML ≥ 1 km, terkalibrasi | Masukan sempurna |
+|---|---|---|---|---|
+| IDW, seperti dasbor | 2,37 | 2,22 | 2,25 | 1,57 |
+| Ridge tautan → sel, terikat topologi | 2,22 | 2,23 | **2,19** | **1,49** |
+| MLP per sel, 8 tautan terdekat + IDW | 2,22 | **2,21** | 2,22 | 1,54 |
 
-- **Sebagian besar galat datang dari taksiran per tautan, bukan dari interpolasi.** Dengan
-  hujan per tautan yang sempurna, RMSE turun dari 2,3–2,8 ke 1,5–1,6 untuk ketiga metode.
-  Yang paling perlu diperbaiki berikutnya adalah kalibrasi antena basah dan k-alpha.
-- MLP mengalahkan IDW dengan masukan dari CML: RMSE 2,48 vs 2,75, CSI ≥ 1 mm/jam
-  0,53 vs 0,48. Biasnya negatif (−0,49 mm/jam), jadi puncak hujan masih teredam.
-- Ridge paling rendah RMSE-nya, tetapi bobotnya hanya berlaku untuk 364 tautan itu.
-  MLP hanya melihat jarak dan hujan tetangga, jadi bisa dipakai pada jaringan dasbor tanpa
-  dilatih ulang.
+- **Sisa galat sebagian besar dari taksiran per tautan, bukan dari interpolasi.** Dengan
+  hujan per tautan yang sempurna, RMSE ketiga metode 1,5–1,6.
+- Ketiga metode hampir setara begitu masukannya baik. MLP unggul pada CSI ≥ 1 mm/jam
+  (0,59 vs 0,53–0,54) tetapi biasnya −0,39 mm/jam, jadi puncak hujan masih teredam.
+- Ridge hanya berlaku untuk 364 tautan itu. MLP hanya melihat jarak dan hujan tetangga,
+  jadi bisa dipakai pada jaringan dasbor tanpa dilatih ulang.
 
-### 9.8 Kalibrasi taksiran per tautan
+### 9.8 Taksiran per tautan: penjajaran waktu, tautan pendek, kalibrasi
 
-`ml/hujannet_ml/calibrate.py`, hasil lengkap di [ml/results/calibrate.md](ml/results/calibrate.md).
+`ml/hujannet_ml/calibrate.py`, hasil di [ml/results/alignment.md](ml/results/alignment.md)
+dan [ml/results/calibrate.md](ml/results/calibrate.md). Angka per tautan di bawah memakai
+tautan ≥ 1 km, bulan uji.
 
-- **Tautan di bawah 1 km adalah sumber galat utama.** Dengan angka dasbor (ITU, antena
-  basah 1,5 dB), tautan ≤ 1 km menaksir 2–10 kali hujan radar dan menyumbang 84 % galat
-  kuadrat di OpenMRG, 62 % di OpenRainER. Satu langkah kuantisasi pada lintasan 300 m sudah
-  terbaca puluhan mm/jam. Tautan 4 km ke atas sudah hampir tanpa bias tanpa kalibrasi.
+- **Cap waktu radar OpenMRG mewakili 5 menit sesudahnya.** Jendela CML t−5..t−1 (dipakai
+  basah/kering) berkorelasi 0,456 dengan radar; jendela t+1..t+5 berkorelasi 0,546. Setelah
+  dijajarkan, korelasi per tautan naik dari 0,56 ke 0,71 dan peta IDW dari 2,75 ke 2,37.
+  OpenRainER sudah pas (radarnya akumulasi yang berakhir pada cap waktu). Akibatnya label
+  basah/kering OpenMRG di 9.5 telat sekitar 6 menit, jadi skor OpenMRG di sana terlalu rendah.
+- **Tautan di bawah 1 km adalah sumber galat terbesar berikutnya.** Dengan angka dasbor
+  (ITU, antena basah 1,5 dB) tautan ≤ 1 km menaksir 2–10 kali hujan radar dan menyumbang
+  88 % galat kuadrat di OpenMRG, 62 % di OpenRainER. Satu langkah kuantisasi pada lintasan
+  300 m sudah terbaca puluhan mm/jam. Tautan 4 km ke atas hampir tanpa bias.
 - **Meminimalkan RMSE langsung adalah sasaran yang salah.** Hasilnya menyusutkan semua
   taksiran ke 16–26 % total radar, dan akumulasi DAS ikut terlalu rendah. Yang dipakai:
   per WAA, pengali k dipilih supaya total taksiran sama dengan radar di bulan latih.
-- Setelah tautan < 1 km dibuang, kalibrasi menurunkan RMSE basah per tautan dari 3,8 ke
-  2,7–2,8 mm/jam. Angkanya berbeda per iklim: pengali k 2,8 di Swedia, 2,1 di Italia.
+- Kalibrasi menurunkan RMSE basah per tautan dari 3,8 ke 2,7 mm/jam (OpenRainER) dan dari
+  3,0 ke 2,4–2,5 (OpenMRG). Pengali k-nya berbeda per iklim: 2,8 di Swedia, 2,1 di Italia.
   Angka Swedia yang dipakai di Italia membuat total hujan 31 % terlalu rendah, jadi
   **jaringan Indonesia perlu disetel dengan radar atau penakar Indonesia sendiri.**
-- Pada peta OpenMRG (RMSE waktu basah): IDW turun dari 2,75 ke 2,61 setelah tautan pendek
-  dibuang, lalu ke 2,41 setelah kalibrasi. MLP 2,48 → 2,45 dan ridge tetap sekitar 2,32.
-  Dengan masukan terkalibrasi, keunggulan MLP atas IDW hilang; perbaikan masukan lebih
-  berguna daripada interpolator yang lebih pintar.
-- Galat masih jauh dari masukan sempurna (1,5–1,6), karena korelasi per tautan hanya
-  sekitar 0,5. Itu batas berikutnya.
-
+- Kalibrasi enam minggu juga tidak stabil: angka OpenMRG sendiri membuat total Agustus
+  22 % terlalu rendah. Untuk peta, membuang tautan pendek sudah memberi hampir seluruh
+  perbaikan; kalibrasi k menambah sedikit atau tidak sama sekali.
 ---
 
 ## 10. Cara kerja

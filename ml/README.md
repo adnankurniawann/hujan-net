@@ -20,6 +20,7 @@ uv run python -m hujannet_ml.wetdry train      # ~15 menit, tulis results/wetdry
 uv run python -m hujannet_ml.cnn               # ~90 menit di CPU, tulis results/wetdry_cnn.md
 uv run python -m hujannet_ml.cnn lstm          # ~3 jam di CPU, tulis results/wetdry_lstm.md
 uv run python -m hujannet_ml.calibrate         # ~1 jam pertama kali, tulis results/calibrate.md
+uv run python -m hujannet_ml.calibrate align   # ~10 menit, tulis results/alignment.md
 uv run python -m hujannet_ml.rainmap           # ~5 menit setelah calibrate, tulis results/rainmap.md
 ```
 
