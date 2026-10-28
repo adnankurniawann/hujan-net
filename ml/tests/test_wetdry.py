@@ -59,3 +59,14 @@ def test_minute_loss_and_to_long():
     df = to_long(feats, ref, meta)
     assert len(df) == 2  # cap waktu ketiga tidak punya label
     assert list(df.ref_mm_h) == [2.0, 2.0] and list(df.freq_ghz) == [23, 18]
+
+
+def test_link_features_window_after_timestamp():
+    """OpenMRG: cap waktu radar mewakili menit sesudahnya, jadi jendela t+1..t+5."""
+    minutes = pd.date_range(T0, periods=2 * 1440, freq="1min")
+    loss = pd.DataFrame({"a|s1": np.full(len(minutes), 50.0, np.float32)}, index=minutes)
+    loss.loc[minutes >= T0 + pd.Timedelta(hours=30, minutes=1), "a|s1"] += 5.0
+    t = T0 + pd.Timedelta(hours=30)
+    f = link_features(loss, pd.DatetimeIndex([t, t - pd.Timedelta(minutes=5)]), window_min=5, start_min=1)
+    assert f["dip_mean"]["a|s1"].iloc[0] == pytest.approx(5)  # menit t+1..t+5 semuanya hujan
+    assert f["dip_mean"]["a|s1"].iloc[1] == pytest.approx(0)  # t-4..t masih kering

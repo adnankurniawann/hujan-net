@@ -35,15 +35,12 @@ import numpy as np
 import pandas as pd
 
 from .cnn import chunk_rows, load, meta_inputs, predict, sequences
-from .wetdry import FEATURE_DIR, RESULTS_DIR, SPLITS, dip_minutes, iter_chunks
+from .wetdry import FEATURE_DIR, RESULTS_DIR, SPLITS, WINDOW_START_MIN, dip_minutes, iter_chunks
 
 DEFAULT = {"waa_db": 1.5, "k_scale": 1.0}  # lib/inverse/waa.ts, lib/physics/itu838.ts
 WAA_GRID = np.arange(0, 3.01, 0.25)
 MIN_LINK_KM = 1.0
 LENGTH_BINS_KM = [0, 0.5, 1, 2, 4, 8, 30]
-# Awal jendela CML relatif terhadap cap waktu radar, menit; panjangnya jendela label
-# (5 menit OpenMRG, 15 OpenRainER). Dipilih dari korelasi tertinggi, lihat results/alignment.md.
-WINDOW_START_MIN = {"openmrg": 1, "openrainer": -15}
 ALIGN_MONTHS = {"openrainer": ("202106", "202107", "202108", "202109")}  # cukup satu musim hujan konvektif
 
 # ITU-R P.838-3, sama dengan lib/physics/itu838.ts: frekuensi GHz, kH, alphaH, kV, alphaV.
@@ -89,15 +86,9 @@ def link_rows(name: str) -> pd.DataFrame:
             if parts:
                 break
             continue
-        rows, dip, pos = chunk_rows(loss, meta, ref, window)
-        end = pos + WINDOW_START_MIN[name] + window  # menit terakhir jendela + 1
-        rows, end = rows[end <= len(dip)].reset_index(drop=True), end[end <= len(dip)]
-        link = rows.link_idx.to_numpy()
-        with np.errstate(invalid="ignore"):
-            dip_mean = np.nanmean(dip[end[:, None] - window + np.arange(window), link[:, None]], 1)
-        ok = np.isfinite(dip_mean)
-        rows, end, link, dip_mean = rows[ok].reset_index(drop=True), end[ok], link[ok], dip_mean[ok]
-        # CNN melihat 120 menit yang berakhir di ujung jendela yang sama
+        rows, dip, end = chunk_rows(loss, meta, ref, window, WINDOW_START_MIN[name])
+        link, dip_mean = rows.link_idx.to_numpy(), rows.dip_mean.to_numpy()
+        # CNN melihat 120 menit yang berakhir di ujung jendela label
         p = np.concatenate([predict(net, sequences(dip, end[i:i + 200_000], link[i:i + 200_000]), meta_inputs(rows.iloc[i:i + 200_000]))
                             for i in range(0, len(rows), 200_000)])
         k, alpha = itu(rows.freq_ghz.to_numpy(), meta.pol.to_numpy()[link])

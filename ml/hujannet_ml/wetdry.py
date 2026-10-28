@@ -6,7 +6,9 @@ Jalankan (setelah openmrg dan openrainer):
 
 Satu contoh = satu sub-link pada satu cap waktu radar. Labelnya basah kalau hujan
 radar rata-rata sepanjang lintasan di atas WET_MM_H. Fitur hanya memakai menit
-SEBELUM cap waktu itu, jadi tidak ada informasi dari masa depan.
+sampai akhir periode yang diukur radar itu (WINDOW_START_MIN), tidak sesudahnya.
+OpenRainER: akumulasi 15 menit yang berakhir di cap waktu. OpenMRG: cap waktu
+mewakili 5 menit sesudahnya (results/alignment.md).
 
 Tiga pembanding, dinilai pada data uji yang sama:
 
@@ -43,6 +45,9 @@ WET_MM_H = 0.1
 BASE_MIN = 1440
 FEATURES = ["dip_mean", "dip_max", "std5_max", "std60", "range60", "freq_ghz", "length_km"]
 MAX_TRAIN_ROWS = 1_500_000
+# Awal jendela CML relatif terhadap cap waktu radar, menit; panjangnya jendela label
+# (5 menit OpenMRG, 15 OpenRainER). Dipilih dari korelasi tertinggi, lihat results/alignment.md.
+WINDOW_START_MIN = {"openmrg": 1, "openrainer": -15}
 
 # Aturan dari lib/inverse/classify.ts: stdThresholdDb, minDipWithVarianceDb, levelThresholdDb.
 RULE_STD_DB, RULE_MIN_DIP_DB, RULE_LEVEL_DB = 0.6, 0.3, 0.9
@@ -77,17 +82,22 @@ def dip_minutes(loss: pd.DataFrame) -> pd.DataFrame:
     return loss - loss.rolling(BASE_MIN, min_periods=BASE_MIN // 4).median()
 
 
-def link_features(loss: pd.DataFrame, times: pd.DatetimeIndex, window_min: int) -> dict[str, pd.DataFrame]:
-    """Fitur per sub-link pada tiap cap waktu radar, dari menit (t - window, t] dan sebelumnya."""
+def link_features(loss: pd.DataFrame, times: pd.DatetimeIndex, window_min: int, start_min: int | None = None) -> dict[str, pd.DataFrame]:
+    """Fitur per sub-link pada tiap cap waktu radar t, dari jendela menit t+start .. t+start+window-1 dan sebelumnya.
+
+    Tanpa start_min, jendelanya menit sebelum t (start = -window).
+    """
     dip = dip_minutes(loss)
     std5 = loss.rolling(5, min_periods=3).std()
     rule = ((std5 > RULE_STD_DB) & (dip > RULE_MIN_DIP_DB)) | (dip > RULE_LEVEL_DB)
     r60 = loss.rolling(60, min_periods=30)
 
-    def at(df):  # shift(1): nilai pada t hanya memakai menit sebelum t
-        return df.shift(1).reindex(times)
-
     w = window_min
+    end = (-w if start_min is None else start_min) + w - 1  # menit terakhir jendela, relatif terhadap t
+
+    def at(df):
+        return df.shift(-end).reindex(times)
+
     return {
         "dip_mean": at(dip.rolling(w, min_periods=1).mean()),
         "dip_max": at(dip.rolling(w, min_periods=1).max()),
@@ -134,7 +144,7 @@ def iter_chunks():
 def build_features() -> None:
     FEATURE_DIR.mkdir(parents=True, exist_ok=True)
     for name, part, loss, meta, ref, window in iter_chunks():
-        df = to_long(link_features(loss, ref.index, window), ref, meta)
+        df = to_long(link_features(loss, ref.index, window, WINDOW_START_MIN[name]), ref, meta)
         df.to_pickle(FEATURE_DIR / f"{name}_{part}.pkl")
         print(f"{name} {part}: {len(df)} contoh")
 

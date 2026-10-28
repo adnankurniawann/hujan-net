@@ -29,7 +29,7 @@ import torch
 from torch import nn
 
 from .wetdry import (FEATURES, MODEL_DIR, RESULTS_DIR, SPLITS, WET_MM_H, dip_minutes, iter_chunks,
-                     link_features, scores, to_long, tune_threshold)
+                     WINDOW_START_MIN, link_features, scores, to_long, tune_threshold)
 
 WINDOW = 120
 SAMPLE_FRACTION = 0.1
@@ -87,12 +87,16 @@ def split_labels(name: str, times: pd.Series) -> np.ndarray:
     return out
 
 
-def chunk_rows(loss, meta, ref, window):
-    """Baris contoh (sama dengan RF) yang punya cukup riwayat untuk satu jendela CNN penuh."""
-    rows = to_long(link_features(loss, ref.index, window), ref, meta)
+def chunk_rows(loss, meta, ref, window, start):
+    """Baris contoh (sama dengan RF) yang punya cukup riwayat untuk satu jendela CNN penuh.
+
+    Mengembalikan juga `end`: indeks menit sesudah akhir jendela label, ujung deret CNN.
+    """
+    rows = to_long(link_features(loss, ref.index, window, start), ref, meta)
     pos = loss.index.get_indexer(rows.time)
-    keep = pos >= WINDOW
-    return rows[keep].reset_index(drop=True), dip_minutes(loss).to_numpy(np.float32), pos[keep]
+    end = pos + start + window
+    keep = (pos >= 0) & (end >= WINDOW) & (end <= len(loss))
+    return rows[keep].reset_index(drop=True), dip_minutes(loss).to_numpy(np.float32), end[keep]
 
 
 def predict(net: nn.Module, x: np.ndarray, meta: np.ndarray) -> np.ndarray:
@@ -109,7 +113,7 @@ def collect() -> dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]]:
     rng = np.random.default_rng(0)
     parts = {"train": [], "val": []}
     for name, part, loss, meta, ref, window in iter_chunks():
-        rows, dip, pos = chunk_rows(loss, meta, ref, window)
+        rows, dip, pos = chunk_rows(loss, meta, ref, window, WINDOW_START_MIN[name])
         split = split_labels(name, rows.time)
         for s in parts:
             m = (split == s) & (rng.random(len(rows)) < SAMPLE_FRACTION)
@@ -157,7 +161,7 @@ def evaluate(nets: dict[str, tuple[nn.Module, float]]) -> dict:
     rf = joblib.load(MODEL_DIR / "wetdry_rf_gabungan.joblib")
     acc = {name: {k: [] for k in ["y", "rule", "rf", *nets]} for name in SPLITS}
     for name, part, loss, meta, ref, window in iter_chunks():
-        rows, dip, pos = chunk_rows(loss, meta, ref, window)
+        rows, dip, pos = chunk_rows(loss, meta, ref, window, WINDOW_START_MIN[name])
         m = split_labels(name, rows.time) == "test"
         if not m.any():
             continue

@@ -261,11 +261,16 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
 
 | MCC pada data uji | OpenRainER | OpenMRG |
 |---|---|---|
-| Aturan ambang dasbor (`classify.ts`) | 0,226 | 0,546 |
-| Random Forest, dilatih pada kedua dataset | 0,486 | 0,580 |
-| Random Forest, dilatih hanya pada dataset lain | 0,335 | 0,556 |
-| 1D-CNN pada deret mentah 120 menit, kedua dataset | 0,536 | 0,629 |
-| LSTM pada deret mentah 120 menit, kedua dataset | **0,540** | **0,638** |
+| Aturan ambang dasbor (`classify.ts`) | 0,226 | 0,586 |
+| Random Forest, dilatih pada kedua dataset | 0,491 | 0,633 |
+| Random Forest, dilatih hanya pada dataset lain | 0,322 | 0,595 |
+| 1D-CNN pada deret mentah 120 menit, kedua dataset | 0,533 | **0,677** |
+| LSTM pada deret mentah 120 menit, kedua dataset, label lama | **0,540** | 0,638 |
+
+Label OpenMRG di sini sudah dijajarkan dengan radar (9.8). RF dan CNN dilatih ulang dengan
+label itu: MCC OpenMRG naik 0,580 → 0,633 (RF) dan 0,629 → 0,677 (CNN), OpenRainER tetap.
+LSTM belum dilatih ulang, jadi baris OpenMRG-nya masih memakai label yang telat 6 menit dan
+tidak bisa dibandingkan langsung.
 
 - Aturan dasbor runtuh di OpenRainER: FAR 88 %, CSI 0,11. Ambangnya disetel untuk
   simulasi berderau 0,2 dB, sedangkan data ini dikuantisasi 1 dB.
@@ -277,12 +282,12 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
   lalu ragam 60 menit.
 - 1D-CNN (`ml/hujannet_ml/cnn.py`, hasil di [ml/results/wetdry_cnn.md](ml/results/wetdry_cnn.md))
   mengalahkan RF di kedua dataset pada baris uji yang sama, padahal hanya dilatih pada
-  10 % contoh latih: CSI 0,39 vs 0,34 (OpenRainER) dan 0,49 vs 0,44 (OpenMRG).
+  10 % contoh latih: CSI 0,38 vs 0,35 (OpenRainER) dan 0,54 vs 0,49 (OpenMRG).
   Jaringan belajar sendiri dari deret redaman, tanpa fitur rancangan tangan.
 - LSTM (`cnn.py lstm`, hasil di [ml/results/wetdry_lstm.md](ml/results/wetdry_lstm.md))
   butuh lebih banyak epoch: setelah 6 epoch ia masih di bawah CNN (MCC 0,507 / 0,616).
   Dengan berhenti dini (terbaik di epoch 9, berhenti di 12) ia sedikit melampaui CNN:
-  MCC 0,540 vs 0,536 dan 0,638 vs 0,629. Selisih sekecil ini belum diuji dengan seed lain,
+  MCC 0,540 vs 0,536 dan 0,638 vs 0,629 (CNN dengan label lama). Selisih sekecil ini belum diuji dengan seed lain,
   jadi CNN dan LSTM dianggap setara. CNN lebih murah dilatih (6 epoch vs 12).
 
 **Di dasbor dipakai LSTM**, bukan CNN: menit kosong sebelum kejadian sama untuk semua
@@ -318,14 +323,14 @@ OpenMRG (364 CML, Gothenburg), dinilai pada 582 sel radar 2 km yang berjarak pal
 
 | RMSE waktu basah (mm/jam) | CML, semua tautan | CML, tautan ≥ 1 km | CML ≥ 1 km, terkalibrasi | Masukan sempurna |
 |---|---|---|---|---|
-| IDW, seperti dasbor | 2,37 | 2,22 | 2,25 | 1,57 |
-| Ridge tautan → sel, terikat topologi | 2,22 | 2,23 | **2,19** | **1,49** |
-| MLP per sel, 8 tautan terdekat + IDW | 2,22 | **2,21** | 2,22 | 1,54 |
+| IDW, seperti dasbor | 2,38 | 2,24 | 2,24 | 1,57 |
+| Ridge tautan → sel, terikat topologi | **2,20** | 2,20 | **2,16** | **1,49** |
+| MLP per sel, 8 tautan terdekat + IDW | 2,24 | **2,15** | 2,21 | 1,54 |
 
 - **Sisa galat sebagian besar dari taksiran per tautan, bukan dari interpolasi.** Dengan
   hujan per tautan yang sempurna, RMSE ketiga metode 1,5–1,6.
 - Ketiga metode hampir setara begitu masukannya baik. MLP unggul pada CSI ≥ 1 mm/jam
-  (0,59 vs 0,53–0,54) tetapi biasnya −0,39 mm/jam, jadi puncak hujan masih teredam.
+  (0,59 vs 0,52–0,56) tetapi biasnya −0,29 sampai −0,39 mm/jam, jadi puncak hujan masih teredam.
 - Ridge hanya berlaku untuk 364 tautan itu. MLP hanya melihat jarak dan hujan tetangga,
   jadi bisa dipakai pada jaringan dasbor tanpa dilatih ulang.
 
@@ -338,21 +343,21 @@ tautan ≥ 1 km, bulan uji.
 - **Cap waktu radar OpenMRG mewakili 5 menit sesudahnya.** Jendela CML t−5..t−1 (dipakai
   basah/kering) berkorelasi 0,456 dengan radar; jendela t+1..t+5 berkorelasi 0,546. Setelah
   dijajarkan, korelasi per tautan naik dari 0,56 ke 0,71 dan peta IDW dari 2,75 ke 2,37.
-  OpenRainER sudah pas (radarnya akumulasi yang berakhir pada cap waktu). Akibatnya label
-  basah/kering OpenMRG di 9.5 telat sekitar 6 menit, jadi skor OpenMRG di sana terlalu rendah.
+  OpenRainER sudah pas (radarnya akumulasi yang berakhir pada cap waktu). Label basah/kering
+  OpenMRG lama telat sekitar 6 menit; RF dan CNN di 9.5 sudah dilatih ulang dengan label baru.
 - **Tautan di bawah 1 km adalah sumber galat terbesar berikutnya.** Dengan angka dasbor
   (ITU, antena basah 1,5 dB) tautan ≤ 1 km menaksir 2–10 kali hujan radar dan menyumbang
-  88 % galat kuadrat di OpenMRG, 62 % di OpenRainER. Satu langkah kuantisasi pada lintasan
+  88 % galat kuadrat di OpenMRG, 57 % di OpenRainER. Satu langkah kuantisasi pada lintasan
   300 m sudah terbaca puluhan mm/jam. Tautan 4 km ke atas hampir tanpa bias.
 - **Meminimalkan RMSE langsung adalah sasaran yang salah.** Hasilnya menyusutkan semua
   taksiran ke 16–26 % total radar, dan akumulasi DAS ikut terlalu rendah. Yang dipakai:
   per WAA, pengali k dipilih supaya total taksiran sama dengan radar di bulan latih.
 - Kalibrasi menurunkan RMSE basah per tautan dari 3,8 ke 2,7 mm/jam (OpenRainER) dan dari
-  3,0 ke 2,4–2,5 (OpenMRG). Pengali k-nya berbeda per iklim: 2,8 di Swedia, 2,1 di Italia.
-  Angka Swedia yang dipakai di Italia membuat total hujan 31 % terlalu rendah, jadi
+  3,1 ke 2,4–2,5 (OpenMRG). Pengali k-nya berbeda per iklim: 2,8 di Swedia, 2,0 di Italia.
+  Angka Swedia yang dipakai di Italia membuat total hujan 34 % terlalu rendah, jadi
   **jaringan Indonesia perlu disetel dengan radar atau penakar Indonesia sendiri.**
 - Kalibrasi enam minggu juga tidak stabil: angka OpenMRG sendiri membuat total Agustus
-  22 % terlalu rendah. Untuk peta, membuang tautan pendek sudah memberi hampir seluruh
+  21 % terlalu rendah. Untuk peta, membuang tautan pendek sudah memberi hampir seluruh
   perbaikan; kalibrasi k menambah sedikit atau tidak sama sekali.
 ---
 
