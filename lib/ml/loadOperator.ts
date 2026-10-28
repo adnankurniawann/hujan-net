@@ -16,6 +16,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { LinearOperator } from "./operator.ts";
 import { deserializeOperator } from "./operator.ts";
+import { deserializeRainMap, type RainMapModel } from "./rainmap.ts";
 import { deserializeWetDry, type WetDryModel } from "./wetdry.ts";
 
 const OPERATOR_PATH = ["data", "ml-operator.json"];
@@ -65,6 +66,29 @@ export function loadWetDryModel(): WetDryModel {
   }
   cachedWetDry = deserializeWetDry(raw);
   return cachedWetDry;
+}
+
+let cachedRainMap: RainMapModel | null = null;
+
+/**
+ * Muat MLP peta hujan dari data/ml-rainmap.json, ditulis
+ * `uv run python -m hujannet_ml.rainmap export`. Gagal keras seperti `loadOperator`.
+ * Tidak terikat topologi, sama seperti LSTM basah/kering.
+ */
+export function loadRainMapModel(): RainMapModel {
+  if (cachedRainMap) return cachedRainMap;
+  const path = join(process.cwd(), "data", "ml-rainmap.json");
+  let raw: unknown;
+  try {
+    raw = JSON.parse(readFileSync(path, "utf8"));
+  } catch (err) {
+    throw new Error(
+      `[ml] gagal membaca ${path}: ${(err as Error).message}. ` +
+        `Jalankan "uv run python -m hujannet_ml.rainmap export" di ml/ untuk menghasilkannya.`,
+    );
+  }
+  cachedRainMap = deserializeRainMap(raw);
+  return cachedRainMap;
 }
 
 /** Hanya untuk pengujian: kosongkan singgahan. */

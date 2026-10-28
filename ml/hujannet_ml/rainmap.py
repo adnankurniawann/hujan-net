@@ -1,7 +1,8 @@
 """Peta hujan dari CML pada data sungguhan: IDW vs ridge vs MLP per sel.
 
 Jalankan (setelah openmrg, wetdry features, dan cnn):
-  uv run python -m hujannet_ml.rainmap
+  uv run python -m hujannet_ml.rainmap          latih dan nilai
+  uv run python -m hujannet_ml.rainmap export   tulis MLP ke data/ml-rainmap.json
 
 Dipakai OpenMRG: 364 CML di sekitar Gothenburg, rapat seperti jaringan dasbor
 (50 tautan di 22 x 17 km). OpenRainER hanya 151 CML untuk seluruh Emilia-Romagna,
@@ -21,6 +22,8 @@ Tiga cara membuat peta, dinilai pada sel yang berjarak <= 2 km dari suatu lintas
 """
 
 import json
+import sys
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -204,5 +207,25 @@ def write_report(results: dict) -> None:
     print("\n".join(lines))
 
 
+def export() -> None:
+    """Bobot MLP sebagai JSON untuk lib/ml/rainmap.ts, plus satu contoh acuan untuk uji kesamaan."""
+    saved = torch.load(FEATURE_DIR.parent / "models" / "rainmap_mlp.pt")
+    w = {k: v.numpy().astype(float) for k, v in saved["state_dict"].items()}
+    k = saved["neighbours"]
+    net = nn.Sequential(nn.Linear(3 * k + 1, 64), nn.ReLU(), nn.Linear(64, 64), nn.ReLU(), nn.Linear(64, 1), nn.ReLU())
+    net.load_state_dict(saved["state_dict"])
+    x = mlp_inputs(np.array([[5.0, 0.0, np.nan, 12.0, 1.0, 0.5, 3.0, 0.0]], np.float32), np.arange(k)[None],
+                   np.linspace(0.2, 3.0, k)[None].astype(np.float32), np.array([[4.0]], np.float32))
+    with torch.no_grad():
+        y = float(net.eval()(torch.from_numpy(x))[0, 0])
+    r = lambda a: np.round(a, 7).ravel().tolist()  # noqa: E731
+    out = {"neighbours": k, "idwCutoffKm": saved["idw_cutoff_km"], "coverKm": COVER_KM,
+           "w0": r(w["0.weight"]), "b0": r(w["0.bias"]), "w1": r(w["2.weight"]), "b1": r(w["2.bias"]),
+           "w2": r(w["4.weight"]), "b2": float(w["4.bias"][0]), "check": {"x": r(x[0]), "y": y}}
+    path = Path(__file__).resolve().parents[2] / "data" / "ml-rainmap.json"
+    path.write_text(json.dumps(out, separators=(",", ":")))
+    print(f"tulis {path}, keluaran acuan {y:.4f} mm/jam")
+
+
 if __name__ == "__main__":
-    main()
+    export() if sys.argv[1:] == ["export"] else main()

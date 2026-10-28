@@ -83,7 +83,7 @@ untuk tampilan perbandingan dan RMSE.
 | `lib/physics/itu838.ts` | `ituCoefficients`, `specificAttenuation`, `rainRateFromAttenuation`, `freeSpacePathLoss` | tabel ITU-R P.838-3, 7–40 GHz |
 | `lib/sim/` | `rainFieldAt`, `simulateEvent`, `findSnapshot`, `buildMeta` | **semua angka penyetelan demo hanya di `scenario.ts`** |
 | `lib/inverse/` | `reconstructEvent(links, options?)` | klasifikasi → garis dasar → WAA → inversi → IDW → RMSE |
-| `lib/ml/` | `fitLinearOperator`, `applyLinearOperator`, `loadOperator`, `classifyWetDryModel`, `loadWetDryModel` | operator ridge di `data/ml-operator.json`, LSTM basah/kering di `data/ml-wetdry.json` |
+| `lib/ml/` | `fitLinearOperator`, `applyLinearOperator`, `loadOperator`, `classifyWetDryModel`, `loadWetDryModel`, `reconstructFieldMl`, `loadRainMapModel` | operator ridge di `data/ml-operator.json`, LSTM basah/kering di `data/ml-wetdry.json`, MLP peta hujan di `data/ml-rainmap.json` (tidak dipakai dasbor, 9.7) |
 | `lib/catchment/` | `loadCatchmentData`, `buildRainSeries`, `catchmentStatesAt` | C-01 70 sel, C-02 70, C-03 116 |
 | `lib/alerts/` | `detectCandidates`, penyimpanan Prisma | konfirmasi/abaikan lewat API |
 | `lib/evacuation/` | `lookupRoute`, `sampleRainAt` | |
@@ -332,7 +332,24 @@ OpenMRG (364 CML, Gothenburg), dinilai pada 582 sel radar 2 km yang berjarak pal
 - Ketiga metode hampir setara begitu masukannya baik. MLP unggul pada CSI ≥ 1 mm/jam
   (0,59 vs 0,52–0,56) tetapi biasnya −0,29 sampai −0,39 mm/jam, jadi puncak hujan masih teredam.
 - Ridge hanya berlaku untuk 364 tautan itu. MLP hanya melihat jarak dan hujan tetangga,
-  jadi bisa dipakai pada jaringan dasbor tanpa dilatih ulang.
+  jadi secara teknis bisa dipakai pada jaringan dasbor tanpa dilatih ulang.
+
+**MLP ini tidak dipasang di dasbor, karena tidak pindah ke badai demo.** Lintasan majunya
+ada di `lib/ml/rainmap.ts` (sama dengan PyTorch, `tests/rainmapModel.test.ts`), dan
+`node scripts/compare-rainmap.ts` membandingkannya pada kejadian demo:
+
+| Kejadian demo, RMSE rata-rata (mm/jam) | Masukan LSTM | Masukan sempurna |
+|---|---|---|
+| IDW (dasbor) | 3,51 | 3,35 |
+| MLP dari OpenMRG | 5,01 | 5,01 |
+| Ridge, dilatih di simulator (9.4) | 1,58 | — |
+
+Dengan masukan sempurna pun MLP lebih buruk, biasnya +2,9 mm/jam: hujan disebar terlalu
+luas. Dugaan (belum diuji): ia belajar dari hujan musim panas Swedia yang merata, dinilai
+pada sel radar 2 km, sedangkan badai demo terdiri dari sel konvektif berjari-jari 2–3 km.
+Ridge menang di sini karena dilatih pada simulator yang sama (9.3). Interpolasi yang
+dipelajari dari satu iklim tidak bisa langsung dipakai di iklim lain; untuk Indonesia
+perlu radar Indonesia.
 
 ### 9.8 Taksiran per tautan: penjajaran waktu, tautan pendek, kalibrasi
 
