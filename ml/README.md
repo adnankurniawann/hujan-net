@@ -19,6 +19,7 @@ uv run python -m hujannet_ml.wetdry features   # ~5 menit, 37 juta contoh
 uv run python -m hujannet_ml.wetdry train      # ~15 menit, tulis results/wetdry.md
 uv run python -m hujannet_ml.cnn               # ~90 menit di CPU, tulis results/wetdry_cnn.md
 uv run python -m hujannet_ml.cnn lstm          # ~3 jam di CPU, tulis results/wetdry_lstm.md
+uv run python -m hujannet_ml.rainmap           # ~30 menit, peta hujan OpenMRG, tulis results/rainmap.md
 ```
 
 Hasil model yang sudah diukur ada di [`results/`](results/) dan masuk git.

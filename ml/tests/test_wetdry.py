@@ -46,12 +46,13 @@ def test_minute_loss_and_to_long():
         {"rsl": (("cml_id", "sublink_id", "time"), np.array([[[-50, -51, -52], [-60, -60, -60]]], np.float32)),
          "tsl": (("cml_id", "sublink_id", "time"), np.full((1, 2, 3), 10, np.float32))},
         coords={"cml_id": ["7"], "sublink_id": ["s1", "s2"], "time": t,
-                "frequency": (("cml_id", "sublink_id"), [[23000.0, 18000.0]]), "length": ("cml_id", [4200.0])},
+                "frequency": (("cml_id", "sublink_id"), [[23000.0, 18000.0]]), "length": ("cml_id", [4200.0]),
+                "polarization": (("cml_id", "sublink_id"), [["v", "h"]])},
     )
     loss, meta = minute_loss(ds)
     assert list(loss.columns) == ["7|s1", "7|s2"]
     np.testing.assert_array_equal(loss["7|s1"], [60, 61, 62])
-    assert list(meta.freq_ghz) == [23, 18] and list(meta.length_km) == [4.2, 4.2]
+    assert list(meta.freq_ghz) == [23, 18] and list(meta.length_km) == [4.2, 4.2] and list(meta.pol) == ["v", "h"]
 
     feats = {k: pd.DataFrame(1.0, index=t[1:], columns=loss.columns) for k in ("dip_mean", "dip_max", "std5_max", "std60", "range60", "rule_wet")}
     ref = pd.DataFrame({"7": [0.0, 2.0, np.nan]}, index=t)

@@ -67,6 +67,7 @@ def minute_loss(cmls: xr.Dataset) -> tuple[pd.DataFrame, pd.DataFrame]:
         "cml_id": [str(c) for c, _ in st.link.values],
         "freq_ghz": st.frequency.values / 1e3,
         "length_km": np.broadcast_to(cmls.length.values[:, None], (cmls.sizes["cml_id"], 2)).ravel() / 1e3,
+        "pol": st.polarization.values.astype(str),
     }, index=cols)
     return df, meta
 

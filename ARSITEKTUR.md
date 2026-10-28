@@ -309,6 +309,28 @@ di `scenario.ts` menaikkan RMSE terburuk melewati 8 mm/jam (puncak 46 → 8,4, p
 dan membuat angka di bagian ini tidak berlaku lagi. Kalau ambang peringatan perlu muncul di
 demo, yang diskalakan adalah ambangnya (`demoScale` di `catchment-config.json`).
 
+### 9.7 Peta hujan pada data operator sungguhan
+
+`ml/hujannet_ml/rainmap.py`, hasil lengkap di [ml/results/rainmap.md](ml/results/rainmap.md).
+OpenMRG (364 CML, Gothenburg), dinilai pada 582 sel radar 2 km yang berjarak paling jauh
+2 km dari suatu lintasan, uji Agustus 2015. Hujan per tautan ditaksir dari CML saja:
+basah/kering CNN, antena basah 1,5 dB, ITU k-alpha.
+
+| RMSE waktu basah (mm/jam) | Masukan dari CML | Masukan sempurna |
+|---|---|---|
+| IDW, seperti dasbor | 2,75 | 1,59 |
+| Ridge tautan → sel, terikat topologi | **2,33** | **1,48** |
+| MLP per sel, 8 tautan terdekat + IDW | 2,48 | 1,54 |
+
+- **Sebagian besar galat datang dari taksiran per tautan, bukan dari interpolasi.** Dengan
+  hujan per tautan yang sempurna, RMSE turun dari 2,3–2,8 ke 1,5–1,6 untuk ketiga metode.
+  Yang paling perlu diperbaiki berikutnya adalah kalibrasi antena basah dan k-alpha.
+- MLP mengalahkan IDW dengan masukan dari CML: RMSE 2,48 vs 2,75, CSI ≥ 1 mm/jam
+  0,53 vs 0,48. Biasnya negatif (−0,49 mm/jam), jadi puncak hujan masih teredam.
+- Ridge paling rendah RMSE-nya, tetapi bobotnya hanya berlaku untuk 364 tautan itu.
+  MLP hanya melihat jarak dan hujan tetangga, jadi bisa dipakai pada jaringan dasbor tanpa
+  dilatih ulang.
+
 ---
 
 ## 10. Cara kerja
