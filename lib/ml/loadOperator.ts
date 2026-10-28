@@ -16,6 +16,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { LinearOperator } from "./operator.ts";
 import { deserializeOperator } from "./operator.ts";
+import { deserializeWetDry, type WetDryModel } from "./wetdry.ts";
 
 const OPERATOR_PATH = ["data", "ml-operator.json"];
 
@@ -41,6 +42,29 @@ export function loadOperator(): LinearOperator {
   }
   cached = deserializeOperator(raw);
   return cached;
+}
+
+let cachedWetDry: WetDryModel | null = null;
+
+/**
+ * Muat LSTM basah/kering dari data/ml-wetdry.json, ditulis
+ * `uv run python -m hujannet_ml.cnn export`. Gagal keras seperti `loadOperator`.
+ * Bobotnya tidak terikat topologi, jadi berlaku untuk tautan mana pun.
+ */
+export function loadWetDryModel(): WetDryModel {
+  if (cachedWetDry) return cachedWetDry;
+  const path = join(process.cwd(), "data", "ml-wetdry.json");
+  let raw: unknown;
+  try {
+    raw = JSON.parse(readFileSync(path, "utf8"));
+  } catch (err) {
+    throw new Error(
+      `[ml] gagal membaca ${path}: ${(err as Error).message}. ` +
+        `Jalankan "uv run python -m hujannet_ml.cnn export" di ml/ untuk menghasilkannya.`,
+    );
+  }
+  cachedWetDry = deserializeWetDry(raw);
+  return cachedWetDry;
 }
 
 /** Hanya untuk pengujian: kosongkan singgahan. */

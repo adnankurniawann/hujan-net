@@ -24,6 +24,7 @@
 import type { Link, LinkSample } from "../types";
 import { distanceKm } from "../sim/geo.ts";
 import { median, quantile, stdDev } from "./stats.ts";
+import { classifyWetDryModel, type WetDryModel } from "../ml/wetdry.ts";
 
 export interface WetDryOptions {
   /** Lebar jendela ragam jangka pendek, jumlah cuplikan, menoleh ke belakang. */
@@ -220,17 +221,22 @@ export function applyNeighbourConsistency(
 /**
  * Klasifikasi lengkap untuk seluruh jaringan: per tautan lalu pemeriksaan
  * ketetanggaan. Ini yang dipakai jalur utama model invers.
+ *
+ * Kalau `model` diberikan, penanda per tautan berasal dari LSTM terlatih
+ * (lib/ml/wetdry.ts), bukan dari aturan ambang di atas.
  */
 export function classifyNetwork(
   links: readonly Link[],
   samplesByLink: Map<string, LinkSample[]>,
   options: WetDryOptions & NeighbourOptions = {},
+  model?: WetDryModel,
 ): Map<string, boolean[]> {
   const perLink = new Map<string, boolean[]>();
   for (const link of links) {
+    const samples = samplesByLink.get(link.id) ?? [];
     perLink.set(
       link.id,
-      classifyWetDry(samplesByLink.get(link.id) ?? [], options),
+      model ? classifyWetDryModel(samples, link, model) : classifyWetDry(samples, options),
     );
   }
   return applyNeighbourConsistency(links, perLink, samplesByLink, options);

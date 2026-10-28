@@ -32,6 +32,7 @@ import { computeBias, computeRmse } from "./rmse.ts";
 import { retrieveRainRate } from "./retrieve.ts";
 import { correctWaa } from "./waa.ts";
 import { applyLinearOperator, type LinearOperator } from "../ml/operator.ts";
+import type { WetDryModel } from "../ml/wetdry.ts";
 
 /** Deret diagnostik satu tautan sepanjang kejadian. Dipakai panel detail tautan. */
 export interface LinkSeries {
@@ -90,6 +91,11 @@ export interface ReconstructOptions {
    * di server memuatnya lewat `lib/ml/loadOperator.ts`.
    */
   operator?: LinearOperator;
+  /**
+   * LSTM basah/kering terlatih, opsional, dimuat pemanggil lewat
+   * `lib/ml/loadOperator.ts`. Tanpa ini dipakai aturan ambang lama.
+   */
+  wetDryModel?: WetDryModel;
 }
 
 /**
@@ -100,7 +106,7 @@ export function invertSeries(
   event: EventSeries,
   options: ReconstructOptions = {},
 ): Map<string, LinkSeries> {
-  const flags = classifyNetwork(event.links, event.samplesByLink, options.wetDry);
+  const flags = classifyNetwork(event.links, event.samplesByLink, options.wetDry, options.wetDryModel);
   const out = new Map<string, LinkSeries>();
 
   for (const link of event.links) {

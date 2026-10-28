@@ -14,7 +14,7 @@ import {
   type EventReconstruction,
   type LinkSeries,
 } from "@/lib/inverse";
-import { loadOperator } from "@/lib/ml/loadOperator";
+import { loadOperator, loadWetDryModel } from "@/lib/ml/loadOperator";
 import {
   buildMeta,
   findSnapshot,
@@ -35,7 +35,7 @@ export function getEvent(): EventReconstruction {
     // menyentuh cakram, dan lib/ tidak boleh melakukannya sendiri. Kalau
     // berkasnya belum ada (belum pernah "node scripts/train-operator.ts"),
     // loadOperator melempar galat jelas dan itu sengaja bukan didiamkan.
-    cached = reconstructEvent(links, { operator: loadOperator() });
+    cached = reconstructEvent(links, { operator: loadOperator(), wetDryModel: loadWetDryModel() });
     computeMs = performance.now() - started;
   }
   return cached;

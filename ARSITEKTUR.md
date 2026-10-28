@@ -83,7 +83,7 @@ untuk tampilan perbandingan dan RMSE.
 | `lib/physics/itu838.ts` | `ituCoefficients`, `specificAttenuation`, `rainRateFromAttenuation`, `freeSpacePathLoss` | tabel ITU-R P.838-3, 7–40 GHz |
 | `lib/sim/` | `rainFieldAt`, `simulateEvent`, `findSnapshot`, `buildMeta` | **semua angka penyetelan demo hanya di `scenario.ts`** |
 | `lib/inverse/` | `reconstructEvent(links, options?)` | klasifikasi → garis dasar → WAA → inversi → IDW → RMSE |
-| `lib/ml/` | `fitLinearOperator`, `applyLinearOperator`, `loadOperator` | operator ridge, bobot di `data/ml-operator.json` |
+| `lib/ml/` | `fitLinearOperator`, `applyLinearOperator`, `loadOperator`, `classifyWetDryModel`, `loadWetDryModel` | operator ridge di `data/ml-operator.json`, LSTM basah/kering di `data/ml-wetdry.json` |
 | `lib/catchment/` | `loadCatchmentData`, `buildRainSeries`, `catchmentStatesAt` | C-01 70 sel, C-02 70, C-03 116 |
 | `lib/alerts/` | `detectCandidates`, penyimpanan Prisma | konfirmasi/abaikan lewat API |
 | `lib/evacuation/` | `lookupRoute`, `sampleRainAt` | |
@@ -96,7 +96,8 @@ Bobot IDW hanya bergantung geometri, jadi dibangun sekali sebagai matriks jarang
 dipakai ulang untuk 241 langkah waktu. Satu kejadian selesai di bawah satu detik.
 
 `data/ml-operator.json` terikat ke topologi `data/links.json`. Kalau topologinya berubah,
-latih ulang dengan `node scripts/train-operator.ts`.
+latih ulang dengan `node scripts/train-operator.ts`. `data/ml-wetdry.json` tidak terikat
+topologi; buat ulang dengan `uv run python -m hujannet_ml.cnn export` di `ml/`.
 
 ---
 
@@ -148,10 +149,10 @@ lalu dikotori: antena basah 1,5 dB, hanyutan garis dasar 0,5 dB/jam, derau pener
 
 **Model invers**, `lib/inverse/`:
 
-1. **Basah/kering**: ragam jangka pendek di atas 0,6 dB (jendela 21 cuplikan, hanya menoleh
-   ke belakang) atau selisih tingkat di atas 0,9 dB, ditambah konsistensi tetangga dalam
-   radius 6 km. **Ambang tangan, bukan model belajar.** Di data sungguhan kalah
-   jauh dari Random Forest, lihat 9.5.
+1. **Basah/kering**: LSTM yang dilatih pada data operator sungguhan (`lib/ml/wetdry.ts`,
+   lihat 9.5), satu keputusan per menit dari 120 menit sebelumnya, ditambah konsistensi
+   tetangga dalam radius 6 km. Aturan ambang lama (ragam > 0,6 dB atau selisih > 0,9 dB)
+   tetap ada di `classify.ts` dan hanya dipakai kalau model tidak diberikan.
 2. **Garis dasar**: median bergerak atas cuplikan kering, ±15 menit.
 3. **Antena basah**: kurangi 1,5 dB saat basah.
 4. **Inversi**: `R = (A / L / k)^(1/alpha)`.
@@ -181,17 +182,19 @@ ke himpunan uji.
 
 ## 9. Temuan dan batas yang diketahui
 
-Angka dari repo pada 11 Agustus 2026, kejadian demo.
+Angka dari repo pada 28 Oktober 2026, kejadian demo, basah/kering dengan LSTM.
 
 | Ukuran | Nilai |
 |---|---|
-| RMSE rata-rata / terburuk | 3,41 / 7,44 mm/jam |
-| Bias | +1,57 mm/jam |
-| POD / FAR / CSI basah-kering | 99,99 % / 0,45 % / 99,54 % |
+| RMSE rata-rata / terburuk | 3,51 / 7,46 mm/jam |
+| Bias | +1,32 mm/jam |
+| POD / FAR / CSI basah-kering | 96,4 % / 8,6 % / 88,3 % |
 | Galat posisi puncak (puncak / terburuk) | 1,15 / 2,73 km |
 | Cakupan grid dalam jangkauan IDW | 74 % |
 
 ### 9.1 Hampir semua galat berasal dari IDW
+
+Angka 9.1 sampai 9.4 diukur saat basah/kering masih memakai aturan ambang (RMSE 3,41).
 
 | Tahap | RMSE |
 |---|---|
@@ -281,6 +284,23 @@ dipakai melatih: OpenRainER 2022 (9,1 juta contoh) dan OpenMRG Agustus 2015 (6,3
   Dengan berhenti dini (terbaik di epoch 9, berhenti di 12) ia sedikit melampaui CNN:
   MCC 0,540 vs 0,536 dan 0,638 vs 0,629. Selisih sekecil ini belum diuji dengan seed lain,
   jadi CNN dan LSTM dianggap setara. CNN lebih murah dilatih (6 epoch vs 12).
+
+**Di dasbor dipakai LSTM**, bukan CNN: menit kosong sebelum kejadian sama untuk semua
+jendela, jadi keadaan LSTM-nya bisa dihitung sekali. Satu kejadian 50 tautan butuh sekitar
+2,5 detik di JavaScript. Lintasan majunya di TS diuji sama dengan PyTorch.
+
+Pada kejadian demo, LSTM **lebih buruk** daripada aturan lama:
+
+| Kejadian demo | CSI | MCC | RMSE peta |
+|---|---|---|---|
+| Aturan ambang + tetangga | 0,995 | 0,989 | 3,41 mm/jam |
+| LSTM + tetangga | 0,883 | 0,666 | 3,51 mm/jam |
+
+Ini wajar. Aturan itu disetel pada simulator yang sama (kejahatan invers, 9.3), sedangkan
+LSTM tidak pernah melihat simulasi. Galatnya dua jenis: telat menyala di 20 menit pertama
+(tidak ada riwayat sebelum kejadian) dan terus menyala 15 menit setelah badai lewat (di
+data sungguhan hujan jarang berhenti semendadak di simulasi). Angka yang menentukan adalah
+data sungguhan, dan di sana LSTM menang jauh: MCC 0,540 vs 0,226 di OpenRainER.
 
 ### 9.6 Badai demo sengaja tidak dibuat lebih kuat
 

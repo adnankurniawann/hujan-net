@@ -9,6 +9,7 @@ import { join } from "node:path";
 import type { GridField, Link } from "../types.ts";
 import { buildRainSeries, catchmentStatesAt, loadCatchmentData } from "../catchment/index.ts";
 import { reconstructEvent } from "../inverse/index.ts";
+import { loadWetDryModel } from "../ml/loadOperator.ts";
 import {
   DEMO_STORM,
   EVENT_DURATION_S,
@@ -126,7 +127,8 @@ export async function loadSimFrames(): Promise<LoadedEvent> {
   if (cachedEvent) return cachedEvent;
 
   const links = loadLinks();
-  const event = reconstructEvent(links);
+  // Model basah/kering yang sama dengan app/api/sim/store, supaya peta dan peringatan sepakat.
+  const event = reconstructEvent(links, { wetDryModel: loadWetDryModel() });
 
   const frames: SimFrame[] = event.times.map((t, i) => ({
     t,

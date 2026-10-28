@@ -3,6 +3,7 @@
 Jalankan (setelah `wetdry features` dan `wetdry train`, karena RF pembandingnya dimuat dari sana):
   uv run python -m hujannet_ml.cnn        # 1D-CNN
   uv run python -m hujannet_ml.cnn lstm   # LSTM, juga membandingkan CNN yang sudah tersimpan
+  uv run python -m hujannet_ml.cnn export # tulis bobot LSTM ke ../data/ml-wetdry.json untuk dasbor
 
 Masukannya deret redaman mentah 120 menit sebelum cap waktu radar, bukan fitur
 yang dirancang tangan seperti RF. Gagasannya mengikuti Polz dkk. (2020, AMT 13,
@@ -19,6 +20,7 @@ import json
 import os
 import sys
 import time
+from pathlib import Path
 
 import joblib
 import numpy as np
@@ -196,6 +198,28 @@ def load(kind: str) -> tuple[nn.Module, float]:
     return net, saved["threshold"]
 
 
+def export() -> None:
+    """Bobot LSTM sebagai JSON untuk lib/ml/wetdry.ts, plus satu contoh acuan untuk uji kesamaan."""
+    net, thr = load("lstm")
+    w = {k: v.numpy().astype(float) for k, v in net.state_dict().items()}
+    rng = np.random.default_rng(0)
+    dip = np.concatenate([np.full(60, np.nan), rng.normal(0, 0.3, 40), np.linspace(0, 6, 20)])[:, None]
+    x, meta = sequences(dip.astype(np.float32), np.array([WINDOW]), np.array([0])), np.array([[0.5, 0.4]], np.float32)
+    with torch.no_grad():
+        logit = float(net.eval()(torch.from_numpy(x), torch.from_numpy(meta))[0])
+    r = lambda a: np.round(a, 7).ravel().tolist()  # noqa: E731
+    out = {
+        "window": WINDOW, "hidden": net.lstm.hidden_size, "threshold": thr,
+        "wIh": r(w["lstm.weight_ih_l0"]), "wHh": r(w["lstm.weight_hh_l0"]),
+        "b": r(w["lstm.bias_ih_l0"] + w["lstm.bias_hh_l0"]),
+        "w1": r(w["head.0.weight"]), "b1": r(w["head.0.bias"]), "w2": r(w["head.3.weight"]), "b2": float(w["head.3.bias"][0]),
+        "check": {"x": r(x[0].T), "meta": r(meta[0]), "logit": logit},
+    }
+    path = Path(__file__).resolve().parents[2] / "data" / "ml-wetdry.json"
+    path.write_text(json.dumps(out, separators=(",", ":")))
+    print(f"tulis {path}, logit acuan {logit:.4f}")
+
+
 def main(kind: str) -> None:
     torch.set_num_threads(os.cpu_count() or 1)
     data = collect()
@@ -210,4 +234,5 @@ def main(kind: str) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "cnn")
+    arg = sys.argv[1] if len(sys.argv) > 1 else "cnn"
+    export() if arg == "export" else main(arg)
