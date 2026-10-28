@@ -345,8 +345,27 @@ ada di `lib/ml/rainmap.ts` (sama dengan PyTorch, `tests/rainmapModel.test.ts`), 
 | Ridge, dilatih di simulator (9.4) | 1,58 | — |
 
 Dengan masukan sempurna pun MLP lebih buruk, biasnya +2,9 mm/jam: hujan disebar terlalu
-luas. Dugaan (belum diuji): ia belajar dari hujan musim panas Swedia yang merata, dinilai
-pada sel radar 2 km, sedangkan badai demo terdiri dari sel konvektif berjari-jari 2–3 km.
+luas. Dua dugaan sudah diuji dan **ditolak** (argumen skrip mengubah sel badai):
+
+| Kejadian demo, masukan sempurna, RMSE (mm/jam) | IDW | MLP |
+|---|---|---|
+| Badai demo apa adanya | 3,35 | 5,01 |
+| Jari-jari sel ×2 | 5,70 | 7,99 |
+| Jari-jari sel ×3 | 6,00 | 8,65 |
+| Jari-jari ×3, puncak ×0,3 (mirip hujan merata Swedia) | 1,80 | 4,03 |
+| Puncak ×0,3 | 1,00 | 1,29 |
+| Badai demo, dinilai rata-rata blok 2,75 km | 3,02 | 4,57 |
+
+- Bukan karena sel konvektifnya kecil: badai yang lebih lebar membuat MLP makin kalah.
+- Bukan karena grid dasbor lebih halus dari sel radar latih: dinilai per blok 2,75 km pun
+  MLP tetap kalah.
+- Jarak tetangga juga tidak di luar sebaran latih: median jarak ke tautan terdekat 0,53 km
+  di dasbor, 0,79 km di OpenMRG.
+
+Penyebabnya belum diketahui. Yang terlihat: di simulator, IDW sendiri sudah berbias
++1,55 mm/jam dengan masukan sempurna, sedangkan di OpenMRG biasnya nol. Dunia simulasi
+(sel badai terpisah di wilayah yang sebagian besar kering) berbeda dari data latih, dan
+MLP memperbesar bias itu.
 Ridge menang di sini karena dilatih pada simulator yang sama (9.3). Interpolasi yang
 dipelajari dari satu iklim tidak bisa langsung dipakai di iklim lain; untuk Indonesia
 perlu radar Indonesia.

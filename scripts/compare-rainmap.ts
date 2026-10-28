@@ -1,6 +1,9 @@
 // Membandingkan IDW, operator ridge, dan MLP peta hujan pada kejadian demo.
 //
-// Jalankan:  node scripts/compare-rainmap.ts
+// Jalankan:  node scripts/compare-rainmap.ts [skala-jari-jari] [skala-puncak]
+//
+// Kedua skala (bawaan 1) mengubah sel badai demo, untuk menguji apakah MLP hanya
+// gagal pada sel konvektif kecil.
 //
 // MLP (lib/ml/rainmap.ts) dilatih pada data sungguhan OpenMRG dan tidak terikat
 // topologi. Skrip ini yang menunjukkan ia TIDAK pindah ke badai demo, jadi tidak
@@ -18,7 +21,12 @@ import { applyLinearOperator } from "../lib/ml/operator.ts";
 import { buildRainMapKernel, reconstructFieldMl } from "../lib/ml/rainmap.ts";
 
 const links = JSON.parse(readFileSync("data/links.json", "utf8")) as Link[];
-const event = simulateEvent(links, { storm: DEMO_STORM });
+const [radiusScale = 1, peakScale = 1] = process.argv.slice(2).map(Number);
+const storm = {
+  ...DEMO_STORM,
+  cells: DEMO_STORM.cells.map((c) => ({ ...c, radiusKm: c.radiusKm * radiusScale, peakMmH: c.peakMmH * peakScale })),
+};
+const event = simulateEvent(links, { storm });
 const series = invertSeries(event, { wetDryModel: loadWetDryModel() });
 const operator = loadOperator();
 const model = loadRainMapModel();
@@ -34,7 +42,7 @@ const add = (name: string, truth: Parameters<typeof computeRmse>[0], field: Para
 };
 
 for (let i = 0; i < event.times.length; i++) {
-  const truth = rainFieldAt(DEMO_STORM, event.times[i], EVENT_GRID);
+  const truth = rainFieldAt(storm, event.times[i], EVENT_GRID);
   for (const [input, key] of [["LSTM", "estRainMmH"], ["sempurna", "trueRainMmH"]] as const) {
     const rain = links.map((l) => series.get(l.id)?.[key][i] ?? 0);
     const idw = reconstructField(idwKernel, rain);
