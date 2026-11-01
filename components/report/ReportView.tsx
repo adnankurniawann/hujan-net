@@ -17,6 +17,7 @@ import CatchmentCard from "./CatchmentCard";
 import NetworkCard from "./NetworkCard";
 import PerformanceRadar from "./PerformanceRadar";
 import PipelineMarkers from "./PipelineMarkers";
+import RealDataCard from "./RealDataCard";
 import RmseTrend from "./RmseTrend";
 import ScoreCard from "./ScoreCard";
 import { computeMetrics, gradeOfAgreement, radarAxes } from "./metrics";
@@ -184,14 +185,16 @@ export default function ReportView({
           />
         </div>
 
+        <RealDataCard />
+
         {/* Catatan kaki laporan: batas keberlakuan angka di atas, ditulis di
             halaman yang sama dengan angkanya, bukan di dokumen lain. */}
         <footer className="flex shrink-0 items-start gap-3 px-1 pb-1">
           <SectionLabel className="shrink-0">Batas Keberlakuan</SectionLabel>
           <p className="max-w-[110ch] text-3xs leading-4 text-text-dim">
-            Seluruh angka pada halaman ini dihitung dari medan hujan sintetis, bukan dari data
-            redaman operator telekomunikasi. Nilai galat karenanya berlaku untuk kejadian simulasi
-            ini saja dan bukan jaminan kinerja lapangan.
+            Selain kartu Uji pada Data Operator Sungguhan, seluruh angka pada halaman ini dihitung
+            dari medan hujan sintetis. Nilai galatnya berlaku untuk kejadian simulasi ini saja dan
+            bukan jaminan kinerja lapangan.
           </p>
         </footer>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, SectionLabel, StatusDot, type Tone } from "@/components/ui/primitives";
-import { IDW_NEIGHBOURS, IDW_POWER } from "@/components/preview/engine";
+import { IDW_POWER } from "@/components/preview/engine";
 
 /* ============================================================================
  * Rantai fisika dan inversi, ditulis apa adanya.
@@ -54,8 +54,8 @@ export default function PipelineMarkers({
   const inverse: Marker[] = [
     {
       step: "I1",
-      name: "Klasifikasi Basah/Kering",
-      detail: `akurasi ${(wetDryAccuracy * 100).toFixed(1)} %`,
+      name: "Basah/Kering (LSTM)",
+      detail: `akurasi ${(wetDryAccuracy * 100).toFixed(1)} % · data operator`,
       tone: "ok",
     },
     {
@@ -73,7 +73,7 @@ export default function PipelineMarkers({
     {
       step: "I4",
       name: "Interpolasi Grid (IDW)",
-      detail: `K=${IDW_NEIGHBOURS}, p=${IDW_POWER}, ${nx}×${ny} sel`,
+      detail: `2 km, p=${IDW_POWER}, ${nx}×${ny} sel`,
       tone: "rain",
     },
   ];
