@@ -9,7 +9,7 @@
  * untuk cuaca yang disimpulkan, `--signal` untuk yang diukur radio — ditambah
  * `--alert` dan `--ok` untuk status.
  *
- * CARTO Voyager membawa empat rona lagi yang tidak mematuhi aturan itu: perairan
+ * Ubin peta jalan (dulu CARTO Voyager, kini Esri) membawa rona lain yang tidak mematuhi aturan itu: perairan
  * dan tanda jalan besar berwarna biru, taman hijau, jalan arteri kuning-jingga,
  * bangunan cokelat. Biru perairan itu duduk persis di rentang yang sama dengan
  * `--rain`, sehingga di panggung peta ada dua biru yang berarti dua hal berbeda
@@ -37,15 +37,17 @@
  * ketiganya membaca berkas ini.
  */
 
-/** Tiga subdomain dipakai bergiliran: batas sambungan serentak per host. */
-export const BASEMAP_TILES = [
-  "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png",
-  "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png",
-  "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png",
-];
+// CARTO Voyager sejak 2026 hanya mengembalikan ubin "API KEY REQUIRED" tanpa kunci.
+// Esri World Street Map masih terbuka tanpa kunci dan berlabel jalan; rupanya yang
+// berwarna tidak penting karena saturasinya dibuang di bawah.
+// shortcut: layanan Esri lama tanpa kunci bisa ditutup juga, ganti ke ubin berkunci
+// (CARTO atau Esri) lewat variabel lingkungan begitu itu terjadi.
+const ESRI_STREET = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile";
+
+export const BASEMAP_TILES = [`${ESRI_STREET}/{z}/{y}/{x}`];
 
 export const BASEMAP_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &middot; &copy; <a href="https://carto.com/attributions">CARTO</a>';
+  'Ubin &copy; <a href="https://www.esri.com">Esri</a> &middot; Sumber: Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
 /**
  * Alas kertas terang di bawah ubin, sewarna dengan puncak sapuan langit di
@@ -69,7 +71,7 @@ export const BASEMAP_ALPHA = 1;
 /**
  * Kontras DINAIKKAN, bukan diturunkan.
  *
- * Pada Voyager, jalan arteri dibedakan dari daratan lewat rona kuning-jingga.
+ * Pada ubin peta jalan, jalan arteri dibedakan dari daratan lewat rona kuning-jingga.
  * Begitu saturasinya dibuang, pembeda itu ikut hilang dan jalan melebur ke
  * daratan. Kontras mengembalikan pemisahnya sebagai beda terang-gelap — satu-
  * satunya saluran yang tersisa setelah warna tidak lagi boleh dipakai.
@@ -110,10 +112,9 @@ export const BASEMAP_CANVAS_FILTER = `grayscale(1) contrast(${(1 + BASEMAP_CONTR
  */
 export const LINK_DIM_WITH_ROUTE = 0.4;
 
-/** Satu ubin, subdomain dipilih dari koordinatnya supaya beban terbagi rata. */
+/** Satu ubin. Urutan Esri: z/y/x. */
 export function basemapTileUrl(z: number, x: number, y: number): string {
-  const host = ["a", "b", "c"][Math.abs(x + y) % 3];
-  return `https://${host}.basemaps.cartocdn.com/rastertiles/voyager/${z}/${x}/${y}@2x.png`;
+  return `${ESRI_STREET}/${z}/${y}/${x}`;
 }
 
 /**
