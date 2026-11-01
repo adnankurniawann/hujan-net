@@ -471,8 +471,7 @@ export default function EvacuationRouteModal({ route, post, snapshot, bbox, onCl
                 known={rainKnown}
               />
               <p className="mt-2.5 text-2xs leading-4 text-text-dim">
-                Intensitas diambil dari medan hujan hasil inversi pada tiap titik lintasan, bukan
-                dari perkiraan cuaca terpisah.
+                Intensitas hujan dibaca dari peta rekonstruksi di setiap titik lintasan.
               </p>
             </div>
 
@@ -517,7 +516,7 @@ export default function EvacuationRouteModal({ route, post, snapshot, bbox, onCl
               </ConsoleButton>
               {copied === "fail" ? (
                 <Alert type="warning" dense label="Papan klip tidak tersedia" className="mt-2">
-                  Ringkasan dapat dibaca langsung dari daftar ruas di atas.
+                  Salin manual dari daftar ruas di atas.
                 </Alert>
               ) : null}
             </div>

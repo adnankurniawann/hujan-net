@@ -28,21 +28,21 @@ colors:
   scale-high: "#c33f26"
 typography:
   figure-xl:
-    fontFamily: "Martian Mono, ui-monospace, monospace"
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "48px"
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "-0.02em"
     fontFeature: "tnum 1"
   figure-lg:
-    fontFamily: "Martian Mono, ui-monospace, monospace"
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "36px"
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "-0.02em"
     fontFeature: "tnum 1"
   figure-md:
-    fontFamily: "Martian Mono, ui-monospace, monospace"
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "30px"
     fontWeight: 400
     lineHeight: 1
@@ -55,7 +55,7 @@ typography:
     lineHeight: "20px"
     letterSpacing: "-0.01em"
   readout:
-    fontFamily: "Martian Mono, ui-monospace, monospace"
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: "20px"
@@ -186,14 +186,14 @@ This is an operator console lit like an overcast afternoon. The ground is a cool
 
 The material logic is literal. Glass appears only where something is actually being read *through* glass: a panel floating over the live map or over a rain-field canvas. Over flat colour, glass is not glass — it is blur, and blur over flat colour is decoration. Everything not floating over a canvas is opaque paper. That single distinction is what keeps the world from collapsing into the generic frosted-panel look it would otherwise become.
 
-Density is high and unapologetic: this is an instrument, not a landing page. Type runs small (10px and 11px carry most of the interface) so that big monospace figures can mean something when they appear. Colour is rationed to two data accents plus two status colours, and "this control is active" is expressed in ink rather than hue — because an active tool is not a measured quantity and must not look like one.
+Density is high and unapologetic: this is an instrument, not a landing page. Type runs small (10px and 11px carry most of the interface) so that big tabular figures can mean something when they appear. Colour is rationed to two data accents plus two status colours, and "this control is active" is expressed in ink rather than hue — because an active tool is not a measured quantity and must not look like one.
 
 **Key Characteristics:**
 - Daylight-overcast light ground (`#e4ebf2` → `#d3dce6`), a single vertical sky wash, no colour blobs
 - Exactly two data accents: blue `--rain` (inferred weather) and amber `--signal` (what the radio measured)
 - Active state is ink, never accent colour
 - Glass only over map or field canvas; everywhere else, opaque paper
-- Every numeral in Martian Mono, tabular, with its unit written out
+- Every numeral in Archivo with tabular figures, its unit written out
 - Fixed 1440px single-screen desktop; only stage content scrolls
 - Undefined metrics render as `—`
 
@@ -231,17 +231,17 @@ A cool, low-chroma daylight palette in which every saturated pixel is either a m
 ## Typography
 
 **UI Font:** Archivo (with ui-sans-serif, system-ui, sans-serif)
-**Numeral Font:** Martian Mono (with ui-monospace, monospace), tabular figures always on
+**Numeral Font:** Archivo, tabular figures always on
 
-**Character:** Studio grotesque, black on white. Archivo carries the words and Martian Mono carries every number, so digits never shift column as time advances.
+**Character:** Studio grotesque, black on white. Archivo carries words and numbers alike; tabular figures keep digits from shifting column as time advances.
 
 The pairing took two attempts on 31 July 2026, and both corrections are worth recording. The console shipped on Inter + JetBrains Mono: two good faces, but the default pairing of very nearly every machine-generated interface, saying nothing about this product. It was then moved to IBM Plex, which is correct on the technical merits — its Sans and Mono are a designed pair — but has no attitude, and was rejected on sight.
 
-Archivo + Martian Mono was chosen against a reference: a film-production portfolio, black and white, bold and editorial. **The reference had to be translated rather than copied.** That site is display type at enormous sizes with very little text; this console is 10px and 11px carrying nearly the whole interface, in tight columns of numbers. Archivo is the one grotesque with that editorial weight that was also drawn to hold up small — the more mannered grotesques close their apertures at 10px, and 10px is where this console lives.
+Archivo was chosen against a reference: a film-production portfolio, black and white, bold and editorial. **The reference had to be translated rather than copied.** That site is display type at enormous sizes with very little text; this console is 10px and 11px carrying nearly the whole interface, in tight columns of numbers. Archivo is the one grotesque with that editorial weight that was also drawn to hold up small — the more mannered grotesques close their apertures at 10px, and 10px is where this console lives.
 
 The attitude therefore lives in **treatment, not in the face**: headline figures at weight 600 and −0.04em, titles bold and tight, body text left quiet at 400. If everything thickens, nothing stands out and only noise is left.
 
-Martian Mono is markedly wider than the mono it replaced, so `.tnum` carries −0.035em to claw back column width. Letter-spacing is tightened, never glyph width: the figures stay tabular, so digits still do not shift column as the clock advances.
+Martian Mono once carried the numbers and was dropped in favour of one family. `.tnum` keeps tabular figures with −0.01em tracking, so digits do not shift column as the clock advances.
 
 The CSS variables are named by role (`--font-sans`, `--font-mono`), never by brand — a lesson this file learned twice.
 
@@ -253,7 +253,7 @@ The CSS variables are named by role (`--font-sans`, `--font-mono`), never by bra
 - **Label** (Inter, 500, 10px / 14px, uppercase, tracking 0.16em): section labels, chips, buttons. Every button in the console is a label, not a title.
 
 ### Named Rules
-**The Mono Numeral Rule.** Every number, unit, link ID, coordinate, and clock is Martian Mono with tabular figures. There is no exception for "just one number in a sentence".
+**The Tabular Numeral Rule.** Every number, unit, link ID, coordinate, and clock uses tabular figures. There is no exception for "just one number in a sentence".
 
 **The Written Unit Rule.** A number never ships bare. The unit (dB, mm/jam, GHz, km) is written next to it in Archivo at one step smaller in dim ink. When a quantity is genuinely dimensionless, the unit slot stays empty and the name goes in the label — it is never filled with a letter that could be misread as a unit.
 
@@ -334,7 +334,7 @@ An 8px accent circle with a 3px state ring. Colour is never the sole carrier of 
 ### Do:
 - **Do** treat `rain` as the inferred weather quantity and `signal` as what the radio measured, and keep `alert` / `ok` for status only.
 - **Do** render active state as ink fill on white (`bg-text text-surface`).
-- **Do** set every number in Martian Mono with tabular figures and its unit written out beside it.
+- **Do** set every number with tabular figures and its unit written out beside it.
 - **Do** render an undefined metric as `—`, and give any metric that can be undefined a `number | null` type so the null survives to the screen.
 - **Do** use `.glass` only when a map or rain-field canvas is behind the element; use opaque `.card` everywhere else.
 - **Do** keep layout spacing on the 4px rhythm and reserve 2/6/10/14 for dense in-component spacing.

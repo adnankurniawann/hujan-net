@@ -226,27 +226,27 @@ export function radarAxes(m: ReportMetrics, wetDryAccuracy: number): RadarAxis[]
     {
       axis: "Korelasi",
       score: pct(m.correlation),
-      hint: "Korelasi Pearson antar sel grid. Mengukur apakah bentuk dan posisi sel hujan tertangkap, terlepas dari besarnya.",
+      hint: "Korelasi Pearson antarsel grid: apakah bentuk dan posisi hujan tertangkap, berapa pun besarnya.",
     },
     {
       axis: "Galat",
       score: pct(1 - m.rmse / errRef),
-      hint: "RMSE dibandingkan puncak medan sebenarnya. 100 berarti galat jauh lebih kecil daripada intensitas yang diukur.",
+      hint: "RMSE dibagi puncak medan sebenarnya. Nilai 100 berarti galatnya kecil dibanding hujan terkuat.",
     },
     {
       axis: "Bias",
       score: pct(1 - Math.abs(m.bias) / biasRef),
-      hint: "Selisih rata-rata rekonstruksi terhadap medan sebenarnya. Menandakan kecenderungan menaksir terlalu tinggi atau rendah.",
+      hint: "Selisih rata-rata rekonstruksi terhadap medan sebenarnya. Positif berarti taksiran terlalu tinggi.",
     },
     {
       axis: "Puncak",
       score: pct(1 - Math.abs(m.peakRecon - m.peakTruth) / peakRef),
-      hint: "Selisih nilai puncak. Penting karena intensitas tertinggi itulah yang memicu ambang siaga DAS.",
+      hint: "Selisih nilai puncak. Hujan terkuat yang memicu ambang siaga DAS.",
     },
     {
       axis: "Deteksi",
       score: pct(wetDryAccuracy),
-      hint: "Akurasi klasifikasi basah/kering per tautan terhadap kebenaran dasar sepanjang kejadian. Garis dasarnya ditaksir dari data berderau, bukan dibaca dari simulator, jadi angka ini kinerja pembalik yang sebenarnya. Yang tetap perlu diingat: pembandingnya kebenaran dasar simulasi, bukan hujan sungguhan.",
+      hint: "Akurasi LSTM basah/kering per tautan sepanjang kejadian, dibandingkan dengan simulasi. Garis dasarnya ditaksir dari data berderau, sama seperti di lapangan.",
     },
   ];
 }

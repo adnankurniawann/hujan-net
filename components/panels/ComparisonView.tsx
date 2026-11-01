@@ -309,7 +309,7 @@ export default function ComparisonView({
           peakValue={truthPeak.value}
         />
         <FieldPanel
-          label="Hasil Rekonstruksi Kami"
+          label="Rekonstruksi dari Tautan"
           badge={
             hasMl ? (
               <span className="pill-group flex h-7 gap-0.5 p-0.5">
@@ -317,7 +317,7 @@ export default function ComparisonView({
                   IDW
                 </ConsoleButton>
                 <ConsoleButton active={activeMethod === "ml"} onClick={() => setMethod("ml")}>
-                  AI Terlatih
+                  Ridge
                 </ConsoleButton>
               </span>
             ) : undefined
@@ -344,16 +344,14 @@ export default function ComparisonView({
         <p className="max-w-[46ch] text-3xs leading-5 text-text-dim">
           {activeMethod === "ml" ? (
             <>
-              Kanan diisi operator linear yang bobotnya DIPELAJARI dari ratusan badai sintetis,
-              bukan dirancang tangan seperti IDW — lihat{" "}
-              <code className="text-text-dim/90">scripts/train-operator.ts</code>. Bentuknya
-              sama: satu matriks bobot per sel per tautan, hanya sumbernya beda.
+              Kanan memakai operator ridge: satu bobot per sel per tautan, dipelajari dari ratusan
+              badai simulasi. Ia unggul di sini karena dilatih pada simulator yang sama, jadi
+              angkanya terlalu optimis untuk lapangan.
             </>
           ) : (
             <>
-              Kiri adalah medan hujan yang dibangkitkan simulator. Kanan direkonstruksi hanya dari
-              redaman {links.length} tautan gelombang mikro, tanpa satu pun penakar hujan. Karena
-              kebenaran dasarnya diketahui, galatnya bisa diukur, bukan diklaim.
+              Kiri: medan hujan dari simulator. Kanan: peta yang kami bangun ulang dari redaman{" "}
+              {links.length} tautan gelombang mikro saja, tanpa penakar hujan.
             </>
           )}
         </p>
@@ -361,7 +359,7 @@ export default function ComparisonView({
         <div className="ml-auto flex items-stretch gap-5">
           {hasMl && (
             <div className="flex flex-col justify-center gap-1 border-l border-hairline pl-5">
-              <SectionLabel>AI vs IDW</SectionLabel>
+              <SectionLabel>Ridge vs IDW</SectionLabel>
               <Num
                 value={((snapshot.mlRmse! - snapshot.rmse) / snapshot.rmse) * 100}
                 unit="%"

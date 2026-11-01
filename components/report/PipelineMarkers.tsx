@@ -61,7 +61,7 @@ export default function PipelineMarkers({
     {
       step: "I2",
       name: "Garis Dasar & Koreksi WAA",
-      detail: "baseline kering, redaman antena basah",
+      detail: "garis dasar kering, antena basah",
       tone: "signal",
     },
     {
@@ -81,11 +81,11 @@ export default function PipelineMarkers({
   return (
     <Card
       title="Rantai Model"
-      hint="Urutan langkah yang benar-benar dijalankan tiap satu detik simulasi: model maju menurunkan redaman dari medan hujan, model invers merekonstruksi medan hujan kembali dari redaman itu."
+      hint="Langkah yang dijalankan dasbor. Model maju menghitung redaman dari medan hujan simulasi, lalu model invers membangun ulang peta hujan dari redaman itu."
       bodyClassName="flex flex-col gap-4 px-5 pb-5"
     >
-      <Group label="Model Maju — Medan → Redaman" markers={forward} />
-      <Group label="Model Invers — Redaman → Medan" markers={inverse} />
+      <Group label="Model Maju · Medan → Redaman" markers={forward} />
+      <Group label="Model Invers · Redaman → Medan" markers={inverse} />
     </Card>
   );
 }

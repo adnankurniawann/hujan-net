@@ -76,8 +76,7 @@ function ConfirmDialog({
               melewati ambang <span className="tnum">{candidate.thresholdMm.toFixed(1)}</span> mm.
             </p>
             <p className="mt-3 text-3xs leading-5 text-text-dim">
-              Tindakan ini tercatat atas nama {OPERATOR}. Sistem tidak menerbitkan peringatan tanpa
-              langkah ini.
+              Keputusan ini tercatat atas nama {OPERATOR}.
             </p>
           </div>
           <footer className="flex justify-end gap-2 border-t border-hairline px-5 py-4">
@@ -126,7 +125,7 @@ export default function AlertQueue({
     return (
       <EmptyState
         title="Tidak ada kandidat peringatan"
-        hint="Kandidat muncul otomatis ketika akumulasi satu DAS melewati ambangnya. Penerbitannya tetap menunggu konfirmasi operator."
+        hint="Kandidat muncul saat akumulasi sebuah DAS melewati ambangnya, lalu menunggu keputusan operator."
       />
     );
   }
@@ -239,7 +238,7 @@ export default function AlertQueue({
 
       {history.length > 0 && compact ? (
         <p className="mt-2 px-1 text-3xs text-text-dim">
-          <span className="tnum">{history.length}</span> kandidat sudah diputuskan — lihat riwayat
+          <span className="tnum">{history.length}</span> kandidat sudah diputuskan. Riwayatnya ada
           di panel operasi.
         </p>
       ) : null}

@@ -89,8 +89,8 @@ export default function CatchmentPanel({
              hujan. */
           <div className="px-4 py-3">
             <Alert type="error" label="Status DAS tidak dapat dimuat">
-              {error}. Peta dan pemutar ulang tetap berjalan; yang hilang hanya akumulasi DAS dan
-              antrean peringatan.
+              {error}. Peta dan pemutar tetap jalan, tetapi akumulasi DAS dan antrean peringatan
+              kosong.
             </Alert>
           </div>
         ) : !ready ? (
@@ -137,8 +137,8 @@ export default function CatchmentPanel({
             sekadar kalimat lisan dan tidak bisa tergulir lepas dari antreannya. */}
         <p className="mt-3 flex items-start gap-2 border-t border-hairline pt-3 text-3xs leading-4 text-text-dim">
           <StatusDot tone="alert" glow={false} className="mt-1.5" />
-          Sistem tidak pernah menyiarkan peringatan sendiri. Keputusan ada pada operator, dan
-          setiap keputusan tercatat di basis data.
+          Sistem tidak menyiarkan peringatan sendiri. Operator yang memutuskan, dan setiap
+          keputusan tercatat.
         </p>
       </Panel>
     </div>

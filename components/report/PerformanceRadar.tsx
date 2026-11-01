@@ -77,8 +77,8 @@ export default function PerformanceRadar({ axes }: { axes: RadarAxis[] }) {
           Peringatannya ditulis di halaman, bukan disembunyikan di atribut
           `title` yang tidak akan pernah disentuh siapa pun dari kursi juri. */}
       <p className="mt-1.5 px-1 text-3xs leading-4 text-text-dim">
-        <span className="text-text-mute">†</span> Deteksi diukur terhadap kebenaran dasar
-        simulasi. Garis dasarnya ditaksir, bukan diketahui.
+        <span className="text-text-mute">†</span> Deteksi dinilai terhadap simulasi. Garis
+        dasarnya ditaksir dari data berderau.
       </p>
     </div>
   );

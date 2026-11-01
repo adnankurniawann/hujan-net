@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Martian_Mono } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 
 /* Huruf konsol.
@@ -12,8 +12,10 @@ import "./globals.css";
  *   IBM Plex Sans + Mono — benar secara teknis (Sans dan Mono-nya sepasang
  *   sejak awal), tetapi tidak punya sikap. Ditolak.
  *
- * Archivo + Martian Mono dipilih dari rujukan yang diberikan: grotesque
- * hitam-putih ala studio, bobot tebal yang berkarakter editorial.
+ * Archivo dipilih dari rujukan yang diberikan: grotesque hitam-putih ala
+ * studio, bobot tebal yang berkarakter editorial. Martian Mono untuk angka
+ * sempat dipakai, lalu dibuang: semua teks kini Archivo, angka tetap tabular
+ * lewat `tabular-nums`.
  *
  * KENAPA ARCHIVO DAN BUKAN GROTESQUE YANG LEBIH BERGAYA. Rujukannya portofolio
  * rumah produksi film: tipe raksasa, teks sedikit. Konsol ini kebalikannya —
@@ -25,9 +27,7 @@ import "./globals.css";
  * Bobot 700 sengaja ikut dimuat: sikap editorial itu tinggal di judul dan
  * angka besar, bukan di badan teks.
  *
- * Nama peubahnya berbasis PERAN, bukan merek — `--font-sans` dan `--font-mono`.
- * Peubah bernama menurut mereknya sudah terbukti berbohong dua kali di berkas
- * ini; sekarang penggantian huruf berikutnya cukup mengubah dua baris di sini.
+ * Nama peubahnya berbasis peran (`--font-sans`), jadi mengganti huruf cukup di sini.
  */
 const sans = Archivo({
   subsets: ["latin"],
@@ -36,12 +36,6 @@ const sans = Archivo({
   display: "swap",
 });
 
-const mono = Martian_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "HujanNet Dashboard",
@@ -74,8 +68,8 @@ STORY: Operator melihat sel hujan bergerak, menekan satu tautan, membaca pita
 redaman di bawah garis dasar, lalu membandingkan medan sebenarnya dengan hasil
 rekonstruksi dan melihat galatnya terukur, bukan diklaim.
 
-FIRST VIEWPORT: Peta operasi penuh, keping kaca statistik di kiri atas, legenda
-hujan di kiri bawah, panel detail tautan dan status DAS di rel kanan 380px,
+FIRST VIEWPORT: Peta operasi penuh, keterangan simbol dan legenda hujan di kiri
+bawah, panel detail tautan dan status DAS di rel kanan 380px,
 penggeser waktu di bawah. Keputusan utama — konfirmasi kandidat peringatan —
 naik ke puncak rel begitu ada yang menunggu.
 
@@ -96,7 +90,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${sans.variable} ${mono.variable} antialiased font-sans bg-bg text-text`}
+        className={`${sans.variable} antialiased font-sans bg-bg text-text`}
       >
         <div hidden dangerouslySetInnerHTML={{ __html: `<!--${DIRECTION_CONTRACT}-->` }} />
         {children}

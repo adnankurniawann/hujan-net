@@ -29,7 +29,7 @@ import { formatClock } from "@/components/ui/TopBar";
 const AXIS_TICK = {
   fill: "var(--text-dim)",
   fontSize: 9,
-  fontFamily: "var(--font-mono), ui-monospace, monospace",
+  fontFamily: "var(--font-sans), ui-sans-serif, system-ui, sans-serif",
 };
 
 export default function RmseTrend({
@@ -73,8 +73,7 @@ export default function RmseTrend({
 
       <p className="text-3xs leading-4 text-text-dim">
         Galat dibandingkan puncak medan sebenarnya{" "}
-        <span className="tnum text-rain-text">{peakTruth.toFixed(1)}</span> mm/jam. Karena medan
-        sebenarnya berasal dari simulasi, galat ini terukur — bukan ditaksir.
+        <span className="tnum text-rain-text">{peakTruth.toFixed(1)}</span> mm/jam.
       </p>
 
       <div className="min-h-0 flex-1">

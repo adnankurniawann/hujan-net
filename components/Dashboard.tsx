@@ -19,6 +19,7 @@ const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : use
 /** Urutan tab, dipakai menentukan arah geseran saat panggung berganti. */
 const STAGE_ORDER: StageView[] = ["peta", "perbandingan", "laporan"];
 import { useKeyboardTransport, usePlayback } from "./usePlayback";
+import MapKey from "./map/MapKey";
 import RainLegend from "./map/RainLegend";
 import ComparisonView from "./panels/ComparisonView";
 import CatchmentPanel from "./panels/CatchmentPanel";
@@ -237,8 +238,8 @@ export default function Dashboard({ links, catchmentDefs }: Props) {
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6">
             <SectionLabel>Menyiapkan kejadian</SectionLabel>
             <p className="max-w-[46ch] text-center text-2xs leading-5 text-text-dim">
-              Mengambil kejadian dari server: medan hujan sebenarnya, redaman{" "}
-              {links.length} tautan, dan hasil pembalikannya menjadi peta hujan.
+              Server menghitung medan hujan, redaman {links.length} tautan, dan peta hasil
+              rekonstruksinya.
             </p>
           </div>
         ) : stage === "laporan" ? (
@@ -276,32 +277,7 @@ export default function Dashboard({ links, catchmentDefs }: Props) {
                     evacuationRoute={showEvacuation ? activeEvacRoute : null}
                   />
 
-                  {/* Keping ringkas melayang di atas peta, bukan bilah penuh:
-                      peta adalah isi utama panggung ini dan tidak boleh dipotong.
-
-                      Di sinilah kaca dipakai, dan hanya di sini: yang ada di
-                      belakang keping ini memang peta yang bergerak, jadi
-                      buramnya menunjukkan sesuatu — cuaca terlihat menembusnya. */}
                   <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-2">
-                    <div className="glass flex items-center gap-3 px-4 py-2.5">
-                      <div className="flex flex-col">
-                        <SectionLabel>Tautan Basah</SectionLabel>
-                        <span className="tnum text-sm text-signal-text">
-                          {metrics?.wetLinks ?? 0}
-                          <span className="ml-1 font-sans text-3xs text-text-dim">
-                            / {links.length}
-                          </span>
-                        </span>
-                      </div>
-                      <span className="h-8 w-px bg-hairline" />
-                      <div className="flex flex-col">
-                        <SectionLabel>RMSE</SectionLabel>
-                        <span className="tnum text-sm text-rain-text">
-                          {metrics ? metrics.rmse.toFixed(2) : "—"}
-                          <span className="ml-1 font-sans text-3xs text-text-dim">mm/jam</span>
-                        </span>
-                      </div>
-                    </div>
                     {pendingAlerts > 0 ? (
                       <Alert type="error" dense label={null} overMap className="self-start">
                         <span className="tnum text-alert-text">{pendingAlerts}</span> kandidat
@@ -310,8 +286,9 @@ export default function Dashboard({ links, catchmentDefs }: Props) {
                     ) : null}
                   </div>
 
-                  <div className="pointer-events-none absolute bottom-4 left-4">
-                    <RainLegend label="Intensitas Hujan · Rekonstruksi" />
+                  <div className="pointer-events-none absolute bottom-4 left-4 flex flex-col gap-2">
+                    <MapKey totalLinks={links.length} />
+                    <RainLegend label="Hujan hasil rekonstruksi" />
                   </div>
                 </div>
               ) : snapshot ? (

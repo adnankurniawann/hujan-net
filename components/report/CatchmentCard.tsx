@@ -154,8 +154,7 @@ export default function CatchmentCard({
         <p className="card-inset px-3 py-2.5 text-3xs leading-5 text-text-mute">
           Akumulasi <span className="text-text">{lead.name}</span> mencapai{" "}
           <span className="tnum text-text">{(leadRatio * 100).toFixed(0)} %</span> ambang siaga{" "}
-          <span className="tnum">{lead.thresholdMm}</span> mm. Angka ini berasal dari medan hasil
-          rekonstruksi, bukan dari penakar hujan.
+          <span className="tnum">{lead.thresholdMm}</span> mm, dihitung dari peta hasil rekonstruksi.
         </p>
       ) : null}
 
@@ -198,11 +197,6 @@ export default function CatchmentCard({
         </div>
       </div>
 
-      {/* Poin tata kelola, dipasang permanen supaya bukan sekadar kalimat lisan. */}
-      <p className="flex items-start gap-2 text-3xs leading-4 text-text-dim">
-        <StatusDot tone="alert" className="mt-1.5" glow={false} />
-        Sistem tidak pernah menyiarkan peringatan sendiri. Keputusan akhir ada pada operator.
-      </p>
       </CardBody>
     </AnimatedCard>
   );

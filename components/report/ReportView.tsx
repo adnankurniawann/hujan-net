@@ -19,7 +19,6 @@ import PerformanceRadar from "./PerformanceRadar";
 import PipelineMarkers from "./PipelineMarkers";
 import RealDataCard from "./RealDataCard";
 import RmseTrend from "./RmseTrend";
-import ScoreCard from "./ScoreCard";
 import { computeMetrics, gradeOfAgreement, radarAxes } from "./metrics";
 
 /* ============================================================================
@@ -94,9 +93,8 @@ export default function ReportView({
               <div>
                 <h2 className="text-sm font-semibold text-text">Kesesuaian Medan</h2>
                 <p className="mt-1.5 text-3xs leading-5 text-text-dim">
-                  Mengukur seberapa dekat medan hujan hasil rekonstruksi dengan medan hujan
-                  sebenarnya. Karena medan sebenarnya berasal dari simulasi, kedekatan itu bisa
-                  dihitung — bukan diperkirakan.
+                  Kami membandingkan peta hasil rekonstruksi dengan medan hujan simulasi. Medan
+                  aslinya diketahui, jadi selisihnya bisa dihitung langsung.
                 </p>
               </div>
               <div className="min-h-0 flex-1">
@@ -105,7 +103,7 @@ export default function ReportView({
                 ) : (
                   <div className="flex h-full min-h-[200px] items-center justify-center px-4">
                     <p className="max-w-[28ch] text-center text-3xs leading-5 text-text-dim">
-                      Enam sumbu mutu muncul setelah ada medan hujan untuk dibandingkan.
+                      Enam sumbu mutu muncul begitu hujan turun.
                     </p>
                   </div>
                 )}
@@ -125,11 +123,10 @@ export default function ReportView({
                     Indeks Kesesuaian (d)
                   </span>
                   <p className="max-w-[34ch] text-3xs leading-5 text-text-dim">
-                    Cerah pada waktu berjalan. Tidak ada medan hujan untuk dibandingkan, jadi
-                    indeks kesesuaian belum terdefinisi — bukan bernilai nol, dan bukan sempurna.
+                    Belum hujan pada waktu ini, jadi indeks kesesuaian belum bisa dihitung.
                   </p>
                   <p className="max-w-[34ch] text-3xs leading-5 text-text-dim">
-                    Majukan waktu ke kejadian hujan untuk menilai rekonstruksi.
+                    Geser waktu ke saat hujan untuk menilai rekonstruksi.
                   </p>
                 </div>
               ) : (
@@ -166,7 +163,6 @@ export default function ReportView({
         {/* ================= tiga kartu rincian ================= */}
         <div className="grid shrink-0 grid-cols-[minmax(320px,1fr)_minmax(320px,1.1fr)_minmax(320px,1.05fr)] items-start gap-4">
           <div className="flex flex-col gap-4">
-            <ScoreCard m={m} series={rmseSeries} onOpenComparison={onOpenComparison} />
             <PipelineMarkers
               nx={snapshot.reconstruction.nx}
               ny={snapshot.reconstruction.ny}
@@ -192,9 +188,8 @@ export default function ReportView({
         <footer className="flex shrink-0 items-start gap-3 px-1 pb-1">
           <SectionLabel className="shrink-0">Batas Keberlakuan</SectionLabel>
           <p className="max-w-[110ch] text-3xs leading-4 text-text-dim">
-            Selain kartu Uji pada Data Operator Sungguhan, seluruh angka pada halaman ini dihitung
-            dari medan hujan sintetis. Nilai galatnya berlaku untuk kejadian simulasi ini saja dan
-            bukan jaminan kinerja lapangan.
+            Kecuali kartu Uji pada Data Operator Sungguhan, semua angka di halaman ini berasal
+            dari satu badai simulasi. Kinerja di lapangan perlu diuji dengan data operator.
           </p>
         </footer>
       </div>

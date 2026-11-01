@@ -20,7 +20,7 @@ import { formatClock } from "@/components/ui/TopBar";
 const AXIS_TICK = {
   fill: "var(--text-dim)",
   fontSize: 10,
-  fontFamily: "var(--font-mono), ui-monospace, monospace",
+  fontFamily: "var(--font-sans), ui-sans-serif, system-ui, sans-serif",
 };
 
 /** Satu nilai berjalan besar. Inilah angka yang ditunjuk saat presentasi. */
@@ -120,7 +120,7 @@ export default function LinkDetailPanel({ link, state, trace, t, durationS }: Pr
       <Panel title="Detail Tautan" className="flex-1">
         <EmptyState
           title="Belum ada tautan terpilih"
-          hint="Klik salah satu lintasan tautan di peta untuk melihat daya terima, garis dasar, redaman, dan hasil inversinya."
+          hint="Klik lintasan tautan di peta untuk melihat daya terima, garis dasar, redaman, dan taksiran hujannya."
         />
       </Panel>
     );

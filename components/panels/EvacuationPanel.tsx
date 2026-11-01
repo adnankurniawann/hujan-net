@@ -151,7 +151,7 @@ export default function EvacuationPanel({
       {!origin || !shown || !shownPost ? (
         <EmptyState
           title="Wilayah terdampak belum ditentukan"
-          hint="Rute dihitung dari poligon DAS. Muat definisi DAS untuk mulai menilai lintasan evakuasi."
+          hint="Rute berangkat dari poligon DAS. Muat definisi DAS untuk menilai lintasan evakuasi."
         />
       ) : (
         <>
@@ -236,14 +236,13 @@ export default function EvacuationPanel({
               {noSafeRoute ? (
                 <SafetyNotice className="mt-3">
                   <span className="font-medium text-alert-text">Tidak ada lintasan aman</span> ke
-                  posko mana pun saat ini. Yang ditampilkan adalah lintasan paling pendek, bukan
-                  lintasan aman.
+                  posko mana pun saat ini. Yang tampil adalah lintasan terpendek.
                 </SafetyNotice>
               ) : null}
               {allPostsFull ? (
                 <SafetyNotice className="mt-3">
                   <span className="font-medium text-alert-text">Seluruh posko penuh.</span>{" "}
-                  Diperlukan posko tambahan sebelum pengarahan warga.
+                  Siapkan posko tambahan sebelum mengarahkan warga.
                 </SafetyNotice>
               ) : null}
               {gaps.length > 0 ? (
@@ -279,12 +278,11 @@ export default function EvacuationPanel({
                   bukan diam-diam ditambahkan ke angka jarak — kalau ditambahkan,
                   angka itu berhenti berarti "sejauh ini kendaraan berjalan". */}
               <p className="mt-2 text-3xs leading-4 text-text-dim">
-                Jarak diukur di atas jaringan jalan OpenStreetMap. Di luar itu masih ada{" "}
-                <span className="tnum text-text-mute">{shown.access.origin.meter}</span> m dari titik
-                berat DAS ke jalan terdekat dan{" "}
+                Jarak dihitung di jalan OpenStreetMap. Ditambah{" "}
+                <span className="tnum text-text-mute">{shown.access.origin.meter}</span> m dari pusat
+                DAS ke jalan terdekat dan{" "}
                 <span className="tnum text-text-mute">{shown.access.post.meter}</span> m dari jalan
-                ke posko; keduanya digambar putus-putus di peta karena tidak ada jalan terpetakan di
-                sana.
+                ke posko, digambar putus-putus karena belum ada jalan terpetakan.
               </p>
 
               <CapacityRow post={shownPost} className="mt-3" />
@@ -390,7 +388,7 @@ function CapacityRow({ post, className = "" }: { post: EvacuationPost; className
             <Num value={post.capacity} unit="jiwa" decimals={0} tone="dim" />
           </>
         ) : (
-          "Posko penuh — arahkan ke posko lain"
+          "Posko penuh, arahkan ke posko lain"
         )}
       </p>
     </div>

@@ -192,19 +192,14 @@
 }
 
 @layer utilities {
-  /* Angka selalu monospace dan berlebar tetap (bagian 9 PRD).
-
-     Jarak hurufnya dirapatkan. Martian Mono jauh lebih lebar daripada mono
-     sebelumnya, dan konsol ini menaruh angka di kolom rapat — tanpa koreksi
-     ini, deret seperti "180 / 500 jiwa" dan "0.98 km" mulai membentur tepi
-     wadahnya. Tetap berlebar tetap: yang dirapatkan jarak antarhuruf, bukan
-     lebar glifnya, jadi digit masih tidak bergeser kolom saat waktu berjalan. */
+  /* Angka memakai Archivo dengan digit tabular, jadi kolom angka tidak
+     bergeser saat waktu berjalan. */
   .num,
   .tnum {
-    font-family: var(--font-mono), ui-monospace, monospace;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.01em;
   }
 
   .label {
@@ -221,10 +216,10 @@
      teks kecil yang tenang. Kalau semua ikut menebal, tidak ada yang menonjol
      dan yang tersisa hanya bising. */
   .figure {
-    font-family: var(--font-mono), ui-monospace, monospace;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     font-variant-numeric: tabular-nums;
     font-weight: 600;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
     line-height: 1;
   }
 
@@ -335,7 +330,7 @@
 .maplibregl-ctrl-attrib {
   background: rgba(255, 255, 255, 0.86) !important;
   color: var(--text-dim) !important;
-  font-family: var(--font-mono), ui-monospace, monospace !important;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
   font-size: 10px !important;
   border-radius: 9999px !important;
   padding: 2px 10px !important;
