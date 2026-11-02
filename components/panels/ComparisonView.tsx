@@ -12,7 +12,7 @@ import {
 } from "@/components/map/basemap";
 import { inkCanvasColor, paperCanvasColor } from "@/components/map/canvasTokens";
 import RainLegend from "@/components/map/RainLegend";
-import { ConsoleButton, Num, SectionLabel, SimulationBadge } from "@/components/ui/primitives";
+import { ConsoleButton, HelpDot, Num, SectionLabel, SimulationBadge } from "@/components/ui/primitives";
 
 const KM_PER_DEG = 110.6;
 
@@ -332,7 +332,7 @@ export default function ComparisonView({
       {/* ---- strip galat: angka yang tidak bisa ditunjukkan tim lain ---- */}
       <div className="card flex shrink-0 items-center gap-6 px-5 py-4">
         <div className="flex flex-col gap-1">
-          <SectionLabel>Galat Rekonstruksi (RMSE)</SectionLabel>
+          <SectionLabel className="whitespace-nowrap">Galat (RMSE)</SectionLabel>
           <span className="figure text-4xl text-text">
             {reconRmse.toFixed(2)}
             <span className="ml-2 font-sans text-2xs font-normal tracking-normal text-text-dim">
@@ -341,25 +341,13 @@ export default function ComparisonView({
           </span>
         </div>
 
-        <p className="max-w-[46ch] text-3xs leading-5 text-text-dim">
-          {activeMethod === "ml" ? (
-            <>
-              Kanan memakai operator ridge: satu bobot per sel per tautan, dipelajari dari ratusan
-              badai simulasi. Ia unggul di sini karena dilatih pada simulator yang sama, jadi
-              angkanya terlalu optimis untuk lapangan.
-            </>
-          ) : (
-            <>
-              Kiri: medan hujan dari simulator. Kanan: peta yang kami bangun ulang dari redaman{" "}
-              {links.length} tautan gelombang mikro saja, tanpa penakar hujan.
-            </>
-          )}
-        </p>
-
         <div className="ml-auto flex items-stretch gap-5">
           {hasMl && (
             <div className="flex flex-col justify-center gap-1 border-l border-hairline pl-5">
-              <SectionLabel>Ridge vs IDW</SectionLabel>
+              <span className="flex items-center gap-1.5">
+                <SectionLabel className="whitespace-nowrap">Ridge vs IDW</SectionLabel>
+                <HelpDot hint="Operator ridge belajar satu bobot per sel per tautan dari ratusan badai simulasi. Ia unggul di sini karena dilatih pada simulator yang sama, jadi angkanya terlalu optimis untuk lapangan." />
+              </span>
               <Num
                 value={((snapshot.mlRmse! - snapshot.rmse) / snapshot.rmse) * 100}
                 unit="%"
@@ -370,7 +358,7 @@ export default function ComparisonView({
             </div>
           )}
           <div className="flex flex-col justify-center gap-1 border-l border-hairline pl-5">
-            <SectionLabel>Selisih Posisi Puncak</SectionLabel>
+            <SectionLabel className="whitespace-nowrap">Geser puncak</SectionLabel>
             <Num
               value={rainingNow ? peakOffsetKm : null}
               unit="km"
@@ -380,7 +368,7 @@ export default function ComparisonView({
             />
           </div>
           <div className="flex flex-col justify-center gap-1 border-l border-hairline pl-5">
-            <SectionLabel>Selisih Nilai Puncak</SectionLabel>
+            <SectionLabel className="whitespace-nowrap">Beda puncak</SectionLabel>
             <Num
               value={rainingNow ? reconPeak.value - truthPeak.value : null}
               unit="mm/jam"

@@ -34,7 +34,7 @@ export default function PipelineMarkers({
     {
       step: "F1",
       name: "Medan Hujan Sintetis",
-      detail: "sel hujan bergerak, kebenaran dasar",
+      detail: "sel hujan bergerak",
       tone: "rain",
     },
     {

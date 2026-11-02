@@ -110,8 +110,8 @@ const config: Config = {
         mono: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "3xs": ["10px", { lineHeight: "14px" }],
-        "2xs": ["11px", { lineHeight: "16px" }],
+        "3xs": ["11px", { lineHeight: "16px" }],
+        "2xs": ["12px", { lineHeight: "18px" }],
       },
       letterSpacing: {
         label: "0.12em",

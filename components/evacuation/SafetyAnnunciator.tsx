@@ -88,7 +88,7 @@ export function SafetyAnnunciator({
   return (
     <div ref={rootRef} className={className}>
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-3xs font-medium uppercase tracking-caps text-text-mute">
+        <span className="text-2xs font-semibold text-text-mute">
           Status lintasan
         </span>
         <span className="tnum text-3xs text-text-dim">

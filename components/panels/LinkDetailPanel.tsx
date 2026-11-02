@@ -134,7 +134,7 @@ export default function LinkDetailPanel({ link, state, trace, t, durationS }: Pr
       aside={
         <span className="flex items-center gap-2">
           <StatusDot tone={wet ? "signal" : "mute"} />
-          <span className="text-3xs uppercase tracking-label text-text-mute">
+          <span className="text-2xs font-semibold text-text-mute">
             {wet ? "Basah" : "Kering"}
           </span>
         </span>

@@ -119,7 +119,7 @@ export default function ReportView({
               {m.agreement === null ? (
                 <div className="flex flex-col items-center gap-3 px-8 text-center">
                   <span className="figure text-5xl text-text-mute">—</span>
-                  <span className="text-2xs font-medium uppercase tracking-caps text-text-mute">
+                  <span className="text-2xs font-semibold text-text-mute">
                     Indeks Kesesuaian (d)
                   </span>
                   <p className="max-w-[34ch] text-3xs leading-5 text-text-dim">

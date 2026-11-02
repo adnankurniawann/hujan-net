@@ -723,7 +723,7 @@ export default function RainMap({
       <canvas ref={overlayRef} className="pointer-events-none absolute inset-0" />
       {!loaded ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-bg-deep">
-          <span className="text-2xs uppercase tracking-label text-text-dim">
+          <span className="text-2xs text-text-dim">
             {noWebGl ? "Peta butuh WebGL2, tidak tersedia di peramban ini" : "Memuat peta…"}
           </span>
         </div>

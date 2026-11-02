@@ -63,7 +63,7 @@ export function SectionLabel({
 }) {
   return (
     <span
-      className={`text-3xs font-medium uppercase tracking-caps text-text-mute ${className}`}
+      className={`text-2xs font-semibold text-text-mute ${className}`}
     >
       {children}
     </span>
@@ -331,7 +331,7 @@ export function EmptyState({ title, hint }: { title: string; hint?: string }) {
           <circle cx="6" cy="8.8" r="0.6" fill="currentColor" />
         </svg>
       </span>
-      <p className="text-2xs uppercase tracking-label text-text-mute">{title}</p>
+      <p className="text-2xs font-semibold text-text-mute">{title}</p>
       {hint ? <p className="max-w-[36ch] text-2xs leading-5 text-text-dim">{hint}</p> : null}
     </div>
   );

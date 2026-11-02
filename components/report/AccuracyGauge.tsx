@@ -127,7 +127,7 @@ export default function AccuracyGauge({
             klaim yang tidak dibuat siapa pun di berkas ini. Angkanya ditulis
             apa adanya sebagai 0,96. */}
         <span className="figure text-5xl text-text">{headline}</span>
-        <span className="mt-2 text-2xs font-medium uppercase tracking-caps text-text-mute">
+        <span className="mt-2 text-2xs font-semibold text-text-mute">
           {caption}
         </span>
         <span className="mt-1 max-w-[22ch] text-3xs leading-4 text-text-dim">{footnote}</span>

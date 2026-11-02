@@ -37,7 +37,7 @@ const RainMap = dynamic(() => import("./map/RainMap"), {
   ssr: false,
   loading: () => (
     <div className="absolute inset-0 flex items-center justify-center">
-      <span className="text-2xs uppercase tracking-label text-text-dim">Memuat peta…</span>
+      <span className="text-2xs text-text-dim">Memuat peta…</span>
     </div>
   ),
 });

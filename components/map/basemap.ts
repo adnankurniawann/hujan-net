@@ -69,20 +69,17 @@ export const BASEMAP_GROUND = "#eef3f8";
 export const BASEMAP_ALPHA = 1;
 
 /**
- * Kontras DINAIKKAN, bukan diturunkan.
- *
- * Pada ubin peta jalan, jalan arteri dibedakan dari daratan lewat rona kuning-jingga.
- * Begitu saturasinya dibuang, pembeda itu ikut hilang dan jalan melebur ke
- * daratan. Kontras mengembalikan pemisahnya sebagai beda terang-gelap — satu-
- * satunya saluran yang tersisa setelah warna tidak lagi boleh dipakai.
+ * Ubin Esri membawa bayangan relief dan jalan tebal. Setelah saturasinya dibuang,
+ * hasilnya abu-abu gelap yang tegas dan bersaing dengan warna hujan. Kontras
+ * diturunkan dan titik hitamnya diangkat supaya peta dasar jadi abu-abu muda.
  */
-const BASEMAP_CONTRAST = 0.15;
+const BASEMAP_BRIGHTNESS_MIN = 0.45;
 
 /** Cat lapisan raster MapLibre. Dipakai peta utama dan jendela tinjauan rute. */
 export const BASEMAP_PAINT = {
   "raster-opacity": BASEMAP_ALPHA,
   "raster-saturation": -1,
-  "raster-contrast": BASEMAP_CONTRAST,
+  "raster-brightness-min": BASEMAP_BRIGHTNESS_MIN,
 } as const;
 
 /**
@@ -90,12 +87,11 @@ export const BASEMAP_PAINT = {
  * menggambar ubinnya sendiri. Kepekatannya disetel lewat `globalAlpha`, bukan
  * di sini, supaya nilainya tetap satu: `BASEMAP_ALPHA`.
  *
- * Saturasinya benar-benar sama — nol di kedua sisi. Kontrasnya mendekati, tidak
- * identik: `raster-contrast` MapLibre dan `contrast()` CSS memakai rumus yang
- * berbeda. Pada besaran sekecil ini selisihnya tidak terlihat, dan yang penting
- * di sini adalah tidak ada rona yang tersisa.
+ * Saturasinya sama, nol di kedua sisi. `raster-brightness-min` memetakan v ke
+ * 0,45 + 0,55v; CSS tidak punya geseran itu, jadi contrast(0.55) brightness(1.25)
+ * dipakai sebagai pendekatannya.
  */
-export const BASEMAP_CANVAS_FILTER = `grayscale(1) contrast(${(1 + BASEMAP_CONTRAST).toFixed(2)})`;
+export const BASEMAP_CANVAS_FILTER = "grayscale(1) contrast(0.55) brightness(1.25)";
 
 /**
  * Sebanyak apa jaringan tautan disurutkan ketika lintasan evakuasi tergambar.
