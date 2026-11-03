@@ -116,6 +116,10 @@ Uji:
 npm test
 ```
 
+Tes dijalankan langsung oleh Node tanpa kompilasi, jadi butuh Node resmi (nodejs.org
+atau nvm). Node dari apt di Ubuntu dikompilasi tanpa dukungan TypeScript dan akan
+gagal dengan `ERR_UNKNOWN_FILE_EXTENSION`. Cek dengan `node -p process.features.typescript`.
+
 ## Melatih ulang model
 
 Pipeline Python ada di [`ml/`](ml/README.md) dan memakai [uv](https://docs.astral.sh/uv/).

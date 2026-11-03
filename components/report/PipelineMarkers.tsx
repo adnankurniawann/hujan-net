@@ -55,7 +55,7 @@ export default function PipelineMarkers({
     {
       step: "I1",
       name: "Basah/Kering (LSTM)",
-      detail: `akurasi ${(wetDryAccuracy * 100).toFixed(1)} % · data operator`,
+      detail: `dilatih data operator · akurasi ${(wetDryAccuracy * 100).toFixed(1)} % di simulasi`,
       tone: "ok",
     },
     {

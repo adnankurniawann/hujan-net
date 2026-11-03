@@ -211,7 +211,7 @@ function snapshotAt(
 /**
  * Jalankan model maju lalu model invers untuk seluruh kejadian.
  *
- * Untuk 52 tautan dan 241 langkah waktu, seluruhnya selesai jauh di bawah dua
+ * Untuk 50 tautan dan 241 langkah waktu, seluruhnya selesai jauh di bawah dua
  * detik karena operator interpolasi hanya dibangun sekali.
  */
 export function reconstructEvent(

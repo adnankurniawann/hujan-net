@@ -207,7 +207,9 @@ export default function Dashboard({ links, catchmentDefs }: Props) {
              menghitung rutenya ikut dilepas di sini, jadi jendela yang
              ditinggalkan terbuka akan menahan penilaian terakhir tanpa ada yang
              memperbaruinya lagi — persis keadaan yang baru saja diperbaiki. */
-          onToggleEvacuation={() =>
+          onToggleEvacuation={() => {
+            // Panel evakuasi hanya ada di panggung operasi.
+            if (!showEvacuation && stage === "laporan") setStage("peta");
             setShowEvacuation((prev) => {
               if (prev) {
                 setRouteModalPostId(null);
@@ -215,8 +217,8 @@ export default function Dashboard({ links, catchmentDefs }: Props) {
                 setActiveEvacRoute(null);
               }
               return !prev;
-            })
-          }
+            });
+          }}
         />
 
         {/* Pembungkus panggung. Ada semata-mata supaya pergantian panggung punya

@@ -40,7 +40,7 @@ function CatchmentRow({ c }: { c: CatchmentState }) {
           <span className="ml-1 font-sans text-text-dim">mm</span>
         </span>
         <span className="text-3xs text-text-dim">
-          ambang <span className="tnum">{c.thresholdMm}</span> mm
+          ambang siaga <span className="tnum">{c.thresholdMm}</span> mm
         </span>
       </div>
 
